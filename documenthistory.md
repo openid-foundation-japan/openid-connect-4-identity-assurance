@@ -2,6 +2,11 @@
 
    [[ To be removed from the final specification ]]
    
+   -08
+   
+   * added `uripp` verification method
+   * small fixes to examples
+   
    -07
    
    * fixed typos

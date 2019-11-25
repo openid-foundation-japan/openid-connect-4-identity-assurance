@@ -172,7 +172,6 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {  
-   "iss":"https://server.example.com",
    "sub":"248289761001",
    "email":"janedoe@example.com",
    "email_verified":true,

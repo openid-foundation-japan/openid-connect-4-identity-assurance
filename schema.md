@@ -71,7 +71,7 @@ This section contains the JSON Schema of assertions containing the `verified_cla
         },
         "method":{
           "type":"string",
-          "enum":["pipp","sripp","eid"]
+          "enum":["pipp","sripp","eid","uripp"]
         },
         "verifier":{
           "type":"object",

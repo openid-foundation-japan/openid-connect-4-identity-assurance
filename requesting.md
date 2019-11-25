@@ -4,7 +4,7 @@
 
 Verified Claims can be requested on the level of individual Claims about the End-User by utilizing the `claims` parameter as defined in Section 5.5. of the OpenID Connect specification [@!OpenID]. 
 
-`verified_claims` is added to the `userinfo` or `id_token` element of the `claims` parameter. 
+To request verified claims, the `verified_claims` element is added to the `userinfo` or the `id_token` element of the `claims` parameter. 
 
 Since `verified_claims` contains the effective Claims about the End-User in a nested `claims` element, the syntax is extended to include expressions on nested elements as follows. The `verified_claims` element includes a `claims` element, which in turn includes the desired Claims as keys with a `null` value. An example is shown in the following:
 
@@ -106,7 +106,7 @@ Elements within `verification` can be requested in the same way as defined in (#
 {  
    "verified_claims":{  
       "verification":{  
-         "date":null,
+         "time":null,
          "evidence":null
       },
       "claims":null
@@ -124,7 +124,7 @@ The RP may also dig one step deeper into the structure and request certain data 
 {  
    "verified_claims":{  
       "verification":{  
-         "date":null,
+         "time":null,
          "evidence":[  
             {  
                "method":null,
@@ -147,7 +147,7 @@ The RP may also request certain data within the `document` element to be present
 {  
    "verified_claims":{  
       "verification":{  
-         "date":null,
+         "time":null,
          "evidence":[  
             {  
                "method":null,
@@ -241,5 +241,4 @@ The following is an example:
 
 The OP SHOULD try to fulfill this requirement. If the verification data of the user is older than the requested `max_age`, the OP MAY attempt to refresh the user’s verification by sending her through a online identity verification process, e.g. by utilizing an electronic ID card or a video identification approach. 
 
-If the OP is unable to fulfill the requirement (even in case it is marked as being `essential`), it will provide the RP with the data available and the RP may decide how to use the data. The OP MUST NOT return an error in case it cannot return all Claims requested as essential Claims.
-
+If the OP is unable to fulfill any of the requirements stated in this section (even in case it is marked as being `essential`), it will provide the RP with the data available and the RP may decide how to use the data. The OP MUST NOT return an error in case it cannot return all Claims requested as essential Claims.
