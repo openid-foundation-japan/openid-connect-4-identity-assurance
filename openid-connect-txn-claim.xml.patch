@@ -1,0 +1,48 @@
+--- openid-connect-txn-claim.xml.orig	2024-03-15 23:20:49
++++ openid-connect-txn-claim.xml	2024-03-15 23:21:07
+@@ -62,6 +62,45 @@
+ <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8417.xml"/>
+ </references>
+ 
++<references title="Translation References">
++<reference anchor="oidfj" target="https://www.openid.or.jp">
++  <front>
++    <title>OpenID ファウンデーションジャパン</title>
++    <author fullname="OpenID ファウンデーションジャパン">
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++<reference anchor="oidfj-trans" target='http://openid-foundation-japan.github.com/'>
++  <front>
++    <title>翻訳・教育ワーキンググループ</title>
++    <author fullname="OpenID ファウンデーションジャパン">
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++<reference anchor="oidfj-kycwg" target='https://www.openid.or.jp'>
++  <front>
++    <title>KYC ワーキンググループ</title>
++    <author fullname="OpenID ファウンデーションジャパン">
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++<reference anchor="oidfj-github" target='https://github.com/openid-foundation-japan'>
++  <front>
++    <title>Github レポジトリー</title>
++    <author>
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++</references>
++
+ <section anchor="Acknowledgements"><name>Acknowledgements</name>
+ <t>We would like to thank Mark Haine, Andres Uribe for their valuable feedback and contributions that helped to evolve this specification.</t>
+ </section>

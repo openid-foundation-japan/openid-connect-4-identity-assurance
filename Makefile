@@ -12,6 +12,7 @@ xml2rfc: $(patsubst %.md, %.html, $(SPEC_FILES))
 
 %.xml: %.md
 	docker run --rm -v $$(pwd):/opt $(IMAGE_NAME) mmark $< > $@
+	patch -p0 $@ < $@.patch
 
 %.html: %.xml
 	docker run --rm -v $$(pwd):/opt $(IMAGE_NAME) xml2rfc -p . --html $<

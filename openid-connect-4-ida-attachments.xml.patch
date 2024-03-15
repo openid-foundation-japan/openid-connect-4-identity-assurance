@@ -1,0 +1,48 @@
+--- openid-connect-4-ida-attachments.xml.orig	2024-03-15 23:18:05
++++ openid-connect-4-ida-attachments.xml	2024-03-15 23:18:30
+@@ -585,6 +585,45 @@
+ <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8707.xml"/>
+ </references>
+ 
++<references title="Translation References">
++<reference anchor="oidfj" target="https://www.openid.or.jp">
++  <front>
++    <title>OpenID ファウンデーションジャパン</title>
++    <author fullname="OpenID ファウンデーションジャパン">
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++<reference anchor="oidfj-trans" target='http://openid-foundation-japan.github.com/'>
++  <front>
++    <title>翻訳・教育ワーキンググループ</title>
++    <author fullname="OpenID ファウンデーションジャパン">
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++<reference anchor="oidfj-kycwg" target='https://www.openid.or.jp'>
++  <front>
++    <title>KYC ワーキンググループ</title>
++    <author fullname="OpenID ファウンデーションジャパン">
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++<reference anchor="oidfj-github" target='https://github.com/openid-foundation-japan'>
++  <front>
++    <title>Github レポジトリー</title>
++    <author>
++      <organization>OpenID ファウンデーションジャパン</organization>
++    </author>
++    <date year=""></date>
++  </front>
++</reference>
++</references>
++
+ <section anchor="Acknowledgements"><name>Acknowledgements</name>
+ <t>The following people at yes.com and partner companies contributed to the concept described in the initial contribution to this specification: Karsten Buch, Lukas Stiebig, Sven Manz, Waldemar Zimpfer, Willi Wiedergold, Fabian Hoffmann, Daniel Keijsers, Ralf Wagner, Sebastian Ebling, Peter Eisenhofer.</t>
+ <t>We would like to thank Julian White, Bjorn Hjelm, Stephane Mouy, Alberto Pulido, Joseph Heenan, Vladimir Dzhuvinov, Azusa Kikuchi, Naohiro Fujie, Takahiko Kawasaki, Sebastian Ebling, Marcos Sanz, Tom Jones, Mike Pegman, Michael B. Jones, Jeff Lombardo, Taylor Ongaro, Peter Bainbridge-Clayton, Adrian Field, George Fletcher, Tim Cappalli, Michael Palage, Sascha Preibisch, Giuseppe De Marco, Nick Mothershaw, Hodari McClain, Nat Sakimura and Dima Postnikov for their valuable feedback and contributions that helped to evolve this specification.</t>

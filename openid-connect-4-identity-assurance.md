@@ -1146,3 +1146,12 @@ The technology described in this specification was made available from contribut
    *  added several examples (ID Token vs UserInfo, unverified & Verified Claims, aggregated & distributed Claims)
    *  incorporated text proposal of Marcos Sanz regarding max_age
    *  added IANA registration for new error code `unable_to_meet_requirement`
+
+# Translator {#translator}
+
+本仕様の翻訳は, OpenID ファウンデーションジャパン [@oidfj] KYC ワーキンググループ [@oidfj-kycwg], 翻訳・教育ワーキンググループ [@oidfj-trans] を主体として, 有志のメンバーによって行われました.
+質問や修正依頼などについては, Github レポジトリー [@oidfj-github] にご連絡ください.
+
+* Muneomi Sakuta (SoftBank Corp.)
+* Yuu Kikuchi (OPTiM Corp.)
+* Nov Matake (YAuth.jp)
