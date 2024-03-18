@@ -1,4 +1,4 @@
-FROM ghcr.io/yviscuit/xml2rfc-base:latest
+FROM ghcr.io/ietf-tools/xml2rfc-base:latest
 
 ARG MMARK_VERSION=2.2.31
 
