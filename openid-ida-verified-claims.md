@@ -64,51 +64,71 @@ organization="KDDI Corporation"
 
 .# Abstract
 
-This specification defines a payload schema that can be used to describe a wide variety of identity assurance metadata about a number of Claims that have been assessed as meeting a given assurance level.
+<!-- This specification defines a payload schema that can be used to describe a wide variety of identity assurance metadata about a number of Claims that have been assessed as meeting a given assurance level. -->
+本仕様では, 特定の保証レベルを満たすと評価された多数の Claim に関する様々なアイデンティティ保証メタデータを記述するために使用できる, ペイロードスキーマを定義している.
 
-It is intended that this payload schema is re-usable across many different contexts and application layer protocols including but not limited to [@!OpenID] and [@VerifiableCredentials].
+<!-- It is intended that this payload schema is re-usable across many different contexts and application layer protocols including but not limited to [@!OpenID] and [@VerifiableCredentials]. -->
+このペイロードスキーマは [@!OpenID] と [@VerifiableCredentials] を含むがこれらに限らず, 様々な文脈やアプリケーション層プロトコルにわたって再利用可能であることを目的としている.
 
-This document defines a new claim relating to the identity assurance of a natural person called "verified_claims".  This was originally developed within earlier drafts of OpenID Connect for Identity Assurance. The work and the preceding drafts are the work of the eKYC and Identity Assurance working group of the OpenID Foundation.
+<!-- This document defines a new claim relating to the identity assurance of a natural person called "verified_claims".  This was originally developed within earlier drafts of OpenID Connect for Identity Assurance. The work and the preceding drafts are the work of the eKYC and Identity Assurance working group of the OpenID Foundation. -->
+本ドキュメントでは "verifid_claims" と呼ばれる自然人のアイデンティティ保証に関連する新しいクレームを定義している. これは元々 OpenID Connect for Identity Assurance の以前のドラフトで開発されていたものである. この取り組みと以前のドラフトは, OpenID Foundation eKYC & IDA ワーキンググループの取り組みである.
 
 {mainmatter}
 
 # Introduction {#Introduction}
 
-This specification defines a schema for describing assured identity Claims and a range of associated identity assurance metadata. Much of this definition will be optional as it depends on which processes were run, and the operational requirements for data-minimisation, which elements of the JSON schema described in this document will be needed for a specific transaction.
+<!-- This specification defines a schema for describing assured identity Claims and a range of associated identity assurance metadata. Much of this definition will be optional as it depends on which processes were run, and the operational requirements for data-minimisation, which elements of the JSON schema described in this document will be needed for a specific transaction. -->
+本仕様では, 保障されたidentity Claims と関連する一連のidentity assurance メタデータを記述するためのスキーマを定義している. この定義の多くは, どのプロセスが実行されるか, データ最小化のための運用要件, このドキュメントで説明される JSON スキーマのどの要素が特定のトランザクションに必要になるのかに依存しており任意となっている.
 
 # Scope
 
-This specification defines the schema of JSON objects used to describe identity assurance relating to a natural person.  It consists of the definition of a new claim called `verified_claims` that will be registered with the IANA "JSON Web Token Claims Registry" established by [@!RFC7519].  As part of the definition of the `verified_claims` claim there is also be an element defined called `verification` that provides a flexible container for identity assurance metadata. It is anticipated that the `verification` element may be used by other spec authors and implementers where the verification metadata is needed independantly of the end-user verified Claims.
+<!-- This specification defines the schema of JSON objects used to describe identity assurance relating to a natural person.  It consists of the definition of a new claim called `verified_claims` that will be registered with the IANA "JSON Web Token Claims Registry" established by [@!RFC7519].  As part of the definition of the `verified_claims` claim there is also be an element defined called `verification` that provides a flexible container for identity assurance metadata. It is anticipated that the `verification` element may be used by other spec authors and implementers where the verification metadata is needed independantly of the end-user verified Claims. -->
+
+本仕様では, 自然人に関連するidentity assurance を記述するために使用されるJSON オブジェクトのスキーマを定義している. これは[@!RFC7519]で確立されたIANA の"JSON Web Token Claims Registry"に登録される予定である, `verified_claims` と呼ばれる新しいクレームの定義を構成している. `verified_claims` クレームの定義の一部として, identity assurance メタデータのための柔軟なコンテナを提供する, `verification` と呼ばれる要素も定義されている. `verification` 要素は End-User が検証した Claim に依存しないverification メタデータが必要とされる場合に, 他の仕様の著者や実装者によって使用されるかもしれないことが予期される.
 
 ## Terminology
 
-This section defines some terms relevant to the topic covered in this document, inspired by NIST SP 800-63A [@NIST-SP-800-63a].
+<!-- This section defines some terms relevant to the topic covered in this document, inspired by NIST SP 800-63A [@NIST-SP-800-63a]. -->
+このセクションでは, NIST SP 800-63A [@NIST-SP-800-63a] の影響を受けた, このドキュメントで扱われているトピックに関連するいくつかの用語を定義する.
 
-* Claim - as per definition is section 1.2 of [@!OpenID]
+<!-- * Claim - as per definition is section 1.2 of [@!OpenID] -->
+* Claim - [@!OpenID] セクション 1.2 の定義に従う
 
-* Claims Provider - as per definition is section 1.2 of [@!OpenID] with the additional requirement that they support the schema described in this document. Note: this could be an OpenID Connect Provider, a Verifiable Claims Issuer or other application component that provides verified claims.
+<!-- * Claims Provider - as per definition is section 1.2 of [@!OpenID] with the additional requirement that they support the schema described in this document. Note: this could be an OpenID Connect Provider, a Verifiable Claims Issuer or other application component that provides verified claims. -->
+* Claims Provider - [@!OpenID]  セクション1.2 で定義されている通りであり, このドキュメントで記述されているスキーマをサポートするという要件が追加される.
+Note: これは, OpenID Connect Provider, Verifiable Claims Issuer または検証済みクレームを提供する他のアプリケーションコンポーネントである可能性がある.
 
-* Claims Recipient - an application that receives claims from the Claims provider
+<!-- * Claims Recipient - an application that receives claims from the Claims provider -->
+* Claims Recipient - Claims Provider からクレームを受け取るアプリケーション
 
-* Identity Proofing - process in which an End-User provides evidence to a provider reliably identifying themselves, thereby allowing the provider to assert that identification at a useful assurance level.
+<!-- * Identity Proofing - process in which an End-User provides evidence to a provider reliably identifying themselves, thereby allowing the provider to assert that identification at a useful assurance level. -->
+* Identity Proofing - End-User が自分自身を確実に識別できるエビデンスをプロバイダーに提供することにより, プロバイダーが有用な保証レベルで識別できるようにするプロセス.
 
-* Identity Verification - process conducted by the provider to verify the End-User's identity.
+<!-- * Identity Verification - process conducted by the provider to verify the End-User's identity. -->
+* Identity Verification - End-User identity を verifiacation するためにプロバイダーによって実行されるプロセス
 
-* Identity Assurance - process in which the provider asserts identity data of a certain End-User with a certain assurance towards another consuming entity (such as an OpenID Connect Relying Party or Verifier as described in [@VerifiableCredentials]), typically expressed by way of an assurance level. Depending on legal requirements, the provider may also be required to provide evidence of the identity verification process to the consuming entity.
+<!-- * Identity Assurance - process in which the provider asserts identity data of a certain End-User with a certain assurance towards another consuming entity (such as an OpenID Connect Relying Party or Verifier as described in [@VerifiableCredentials]), typically expressed by way of an assurance level. Depending on legal requirements, the provider may also be required to provide evidence of the identity verification process to the consuming entity. -->
+* Identity Assurance - プロバイダーが, 別の消費エンティティ([@VerifiableCredentials]で記述される OpenID Connect Relying Party やVerifier など)に対して特定の保証を持つ特定のエンドユーザーの Identity データを主張するプロセスで, 通常は assurance レベルで表される. 法的要件に応じて,プロバイダーは identity verification プロセスのエビデンスを消費エンティティに提供する必要がある場合もある.
 
-* Verified Claims - Claims about an End-User, typically a natural person, whose binding to a particular End-User account was verified in the course of an identity verification process.
+
+<!-- * Verified Claims - Claims about an End-User, typically a natural person, whose binding to a particular End-User account was verified in the course of an identity verification process. -->
+* Verified Claims - 特定のエンドユーザーアカウントへのバインドが identity verification プロセスの過程で検証された End-User (通常は自然人) に関する Claim.
 
 # Requirements
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 [RFC2119].
+<!-- The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 [RFC2119]. -->
+本ドキュメントにおける "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", "OPTIONAL" のキーワードは, RFC 2119 [RFC2119] で説明されているように読み替えられる.
 
-The specified JSON structures defined in this document should be useable by any protocol that needs to pass assured digital identity attributes or needs to transfer identity assurance metadata between systems using the [@JSON] Data Interchange Format.
+<!-- The specified JSON structures defined in this document should be useable by any protocol that needs to pass assured digital identity attributes or needs to transfer identity assurance metadata between systems using the [@JSON] Data Interchange Format. -->
+本ドキュメントで定義されている特定の JSON 構造は, 保証される digital identity attributes を渡す必要があるプロトコル, または [@JSON] データ交換フォーマットを用いてシステム間で Identity assurance メタデータを転送する必要があるプロトコルで使用可能である必要がある.
 
 # Verified Claims {#verified_claims}
 
-This specification defines a generic mechanism to add Verified Claims to JSON-based assertions. It uses a container element, called `verified_claims`, to provide the Claims Recipient with a set of Claims along with the respective metadata and verification evidence related to the verification of these Claims. This way, Claims Recipients cannot mix up Verified Claims and unverified Claims and accidentally process unverified Claims as Verified Claims.
+<!-- This specification defines a generic mechanism to add Verified Claims to JSON-based assertions. It uses a container element, called `verified_claims`, to provide the Claims Recipient with a set of Claims along with the respective metadata and verification evidence related to the verification of these Claims. This way, Claims Recipients cannot mix up Verified Claims and unverified Claims and accidentally process unverified Claims as Verified Claims. -->
+本仕様は Verified Claim を JSON ベースのアサーションに追加するための汎用的なメカニズムを定義している. これは `verified_claims` と呼ばれるコンテナ要素を使用し, Claims Recipient に一連の Claim と, これらの Claim の検証に関連するそれぞれのメタデータ及び検証のエビデンスを提供することである. これにより, Claims Recipient が Verified Claims と Unverified Claims を混同したり, Unverified Claims を誤って Verified Claims として処理したりすることがなくなる.
 
-The following example would assert to the Claims Recipient that the Claims Provider has verified the Claims provided (`given_name` and `family_name`) according to an example trust framework `trust_framework_example`:
+<!-- The following example would assert to the Claims Recipient that the Claims Provider has verified the Claims provided (`given_name` and `family_name`) according to an example trust framework `trust_framework_example`: -->
+次の例では, トラストフレームワーク `trust_framework_example` の例に従って, Claims Provider が提供された Claim (`given_name` と`family_name`)を検証したことを Claims Recipient に表明する:
 
 <{{examples/response/verified_claims_simple.json}}
 
@@ -137,7 +157,7 @@ The following example would assert to the Claims Recipient that the Claims Provi
 ## claims Element {#claimselement}
 
 <!-- The `claims` element contains the Claims about the End-User which were verified by the process and according to the policies determined by the corresponding `verification` element described in the next section. -->
-`claims` 要素にはプロセスによって検証され, 次のセクションで説明する，対応した `verification` 要素によって決定されたポリシーに従って検証されたエンドユーザについての Claim が含まれる.
+`claims` 要素にはプロセスによって検証され, 次のセクションで説明する，対応した `verification` 要素によって決定されたポリシーに従って検証された End-User についての Claim が含まれる.
 
 <!-- The `claims` element MAY contain any of the following Claims as defined in Section 5.1 of the OpenID Connect specification [@!OpenID] -->
 `claims` 要素には OpenID Connect specification [@!OpenID] の Section 5.1 で定義されている以下の Claim のいずれかが含まれるかもしれない (MAY)
@@ -149,7 +169,8 @@ The following example would assert to the Claims Recipient that the Claims Provi
 * `birthdate`
 * `address`
 
-and the Claims defined in [@OpenID4IDAClaims].
+<!-- and the Claims defined in [@OpenID4IDAClaims].-->
+また, Claim は[@OpenID4IDAClaims] で定義されている.
 
 <!-- The `claims` element MAY also contain other Claims provided the value of the respective Claim was verified in the verification process represented by the sibling `verification` element. -->
 `claims` 要素は, 兄弟要素の `verification` で提示された検証プロセスでそれぞれの Claim の値が検証された場合, 他の Claim も含むかもしれない (MAY).
@@ -157,15 +178,16 @@ and the Claims defined in [@OpenID4IDAClaims].
 <!-- Claim names MAY be annotated with language tags as specified in Section 5.2 of the OpenID Connect specification [@!OpenID]. -->
 Claim 名は, OpenID Connect 仕様 [@!OpenID] の Section 5.2 で指定されている言語タグで注釈を付けてもよい (MAY).
 
-The `claims` element MAY be empty, to support use cases where verification is required but no Claims data needs to be shared.
-
+<!-- The `claims` element MAY be empty, to support use cases where verification is required but no Claims data needs to be shared. -->
+`claims` 要素は, 検証は要求されるが共有するClaimを必要としないユースケースをサポートするために, 空になるかもしれない (MAY).
 
 ## verification Element {#verification}
 
 <!-- This element contains the information about the process conducted to verify a person's identity and bind the respective person data to a user account. -->
 この要素には, 個人の身元を確認し, それぞれの個人データをユーザーアカウントにバインドするために実行されたプロセスに関する情報が含まれる.
 
-The `verification` element can be used independently of OpenID Connect and OpenID Connect for Identity Assurance where there is a need for representation of identity assurance metadata in a different application protocol or digital identity data format such as [@VerifiableCredentials].
+<!-- The `verification` element can be used independently of OpenID Connect and OpenID Connect for Identity Assurance where there is a need for representation of identity assurance metadata in a different application protocol or digital identity data format such as [@VerifiableCredentials]. -->
+`Verification` 要素は異なるアプリケーションプロトコル又は [@VerifiableCredentials] のようなデジタルアイデンティティデータフォーマットで Identity assurance メタデータの表現が必要な場合, OpenID Connect 及び OpenID Connect for Identity Assurance とは独立して使用できる.
 
 <!-- The `verification` element consists of the following elements: -->
 `verification` 要素は以下の要素を含む:
@@ -200,37 +222,39 @@ The `trust_framework` value determines what further data is provided to the Clai
 Claims Recipients は理解できないトラストフレームワーク識別子を含む `verified_claims` Claim を無視しなければならない (SHOULD)．
 `trust_framework` は, `verification` 要素の中で Claims Recipient に提供される追加のデータを決定する. たとえば, eIDAS 公認 eID システムは, データを追加する必要はないが, eIDAS に管理されていない Claims Provider は Claims Recipient が法的義務を果たすために verification evidence を提供する必要がある. 後者の例としては, ドイツのマネーロンダリング防止法 (`de_aml`) に基づいて行動する Claims Provider である.
 
-* `assurance_level`: OPTIONAL. それぞれの `verified_claims` のエンドユーザーのClaimに関連付けられた assurance レベルを決定する文字列. 値の範囲は，それぞれの `trust_framework` 値によって異なる.例えば，トラストフレームワーク `eidas` は，identity assurance level `low`, `substantial` と `high` を持つことができる．事前定義されたトラストフレームワークと assurance level については [@!predefined_values_page] を参照すること. 
+* `assurance_level`: OPTIONAL. それぞれの `verified_claims` のEnd-User Claimに関連付けられた assurance レベルを決定する文字列. 値の範囲は，それぞれの `trust_framework` 値によって異なる.例えば，トラストフレームワーク `eidas` は，identity assurance level `low`, `substantial` と `high` を持つことができる．事前定義されたトラストフレームワークと assurance level については [@!predefined_values_page] を参照すること. 
 
 * `assurance_process`: OPTIONAL. 実行された保証プロセスを表す JSON オブジェクト．これはエビデンスが `trust_framework` and `assurance_level`の要件をどのように満たしているかを反映する．エビデンスの事実記録と従った手順は `evidence` 要素に記録され，この要素は `evidence` と `assurance_process` を相互参照するために利用される．これには次の1つ以上のサブ要素がある:
   * `policy`: OPTIONAL. 準拠した標準またはポリシーを表す文字列．
   * `procedure`: OPTIONAL. 準拠した `policy` からの特定の手順を表す文字列．
-  * `assurance_details`: OPTIONAL. JSON array denoting the details about how the evidence complies with the `policy`. When present this array MUST have at least one member. Each member can have the following sub-elements:
-     * `assurance_type`: OPTIONAL. String denoting which part of the `assurance_process` the evidence fulfils.
-    * `assurance_classification`: OPTIONAL. String reflecting how the `evidence` has been classified or measured as required by the `trust_framework`.
-    * `evidence_ref`: OPTIONAL. JSON array of the evidence being referred to. When present this array MUST have at least one member.
-      * `check_id`: REQUIRED. Identifier referring to the `check_id` key used in the `check_details` element of members of the `evidence` array. The Claims Provider MUST ensure that `check_id` is present in the `check_details` when `evidence_ref` element is used.
-      * `evidence_metadata`: OPTIONAL. Object indicating any meta data about the `evidence` that is required by the `assurance_process` in order to demonstrate compliance with the `trust_framework`. It has the following sub-elements:
-        * `evidence_classification`: OPTIONAL. String indicating how the process demonstrated by the `check_details` for the `evidence` is classified by the `assurance_process` in order to demonstrate compliance with the `trust_framework`.
+  * `assurance_details`: OPTIONAL. エビデンスが `policy` にどのように準拠しているかに関する詳細を示す JSON 配列. この配列が存在する場合, 少なくとも一つの要素を持たなければならない. 各要素は以下のサブ要素を持つ可能性がある:
+     * `assurance_type`: OPTIONAL. エビデンスが `assurance_process` のどの部分を満たしているのかを示す文字列.
+    * `assurance_classification`: OPTIONAL. `trust_framework`　の要求に応じて `evidence` がどのように分類又は評価されたのか反映する文字列.
+    * `evidence_ref`: OPTIONAL. 参照されているエビデンスの JSON 配列. この配列が存在する場合, 少なくとも一つの要素が存在しなければならない (MUST).
+      * `check_id`: REQUIRED. `evidence` 配列の要素である `check_details` で用いられる `check_id` キーを参照する識別子. Claim Provider は, `evidence_ref` が用いられる場合, `check_id` が `check_details` に存在することを確認しなければならない (MUST).
+      * `evidence_metadata`: OPTIONAL. `trust_framework` への準拠を示すために, `assurance_process` が必要とする `evidence` についてのメタデータを指すオブジェクト. 次のサブ要素を持つ:
+        * `evidence_classification`: OPTIONAL. `trust_framework` への準拠を示すために, `evidence` の `check_details` で示されたプロセスがどのように `assurance_process` によって分類されるのか示すオブジェクト.
 
-* `time`: OPTIONAL. Identity verification が行われた日時を示す ISO 8601 [@!ISO8601] `YYYY-MM-DDThh:mm[:ss]TZD` フォーマットのタイムスタンプ．この時間は，（潜在的に存在する）`document/time` 要素とは異なるかもしれない．なぜなら，後者はあるエビデンスがチェックされた時間を表すのに対し，この要素はプロセスが完了した時間を表すためである．さらに，全体の verification プロセスとエビデンスの検証は，異なる当事者が行うことができる（`document/verifier` を参照）．特定のトラストフレームワークでは，この要素の存在が要求される場合がある．
+* `time`: OPTIONAL. Identity verification が行われた日時を示す ISO 8601 [@!ISO8601] `YYYY-MM-DDThh:mm[:ss]TZD` フォーマットのタイムスタンプ．この時間は, (潜在的に存在する) `document/time` 要素とは異なるかもしれない．なぜなら，後者はあるエビデンスがチェックされた時間を表すのに対し，この要素はプロセスが完了した時間を表すためである．さらに，全体の verification プロセスとエビデンスの検証は，異なる当事者が行うことができる（`document/verifier` を参照）．特定のトラストフレームワークでは，この要素の存在が要求される場合がある．
 
 * `verification_process`: OPTIONAL. Claims Provider が実行する identity verification process への一意な参照．紛争や監査の際に詳細を識別して取り出すために使用される．特定のトラストフレームワークでは，この要素の存在が要求される場合がある．
 
-* `evidence`: OPTIONAL. エンドユーザーの identity を確認するために Claims Provider が使用したエビデンスに関する情報を個別の JSON オブジェクトとして含む JSON 配列．すべてのオブジェクトには，エビデンスの種類を決めるプロパティ `type` が含まれる．Claims Recipient は `evidence` プロパティを適切に処理するためにこの情報を使用する．
+* `evidence`: OPTIONAL. End-User の identity を確認するために Claims Provider が使用したエビデンスに関する情報を個別の JSON オブジェクトとして含む JSON 配列．すべてのオブジェクトには，エビデンスの種類を決めるプロパティ `type` が含まれる．Claims Recipient は `evidence` プロパティを適切に処理するためにこの情報を使用する．
 
 <!-- Important: Implementations MUST ignore any sub-element not defined in this specification or extensions of this specification. -->
 重要: 実装は本仕様または本仕様の拡張で定義されていないサブ要素を無視しなければならない (MUST)．
 
 ### Minimum conformant
 
-Based on the definition above and that there are a significant number of optional sub-elements it is informative to show a minimum conformant `verified_claims` payload.  There can be optionally much more detail included in an openid-ida-verified-claims conformant `verified_claims` element when further detail needs to be transferred. The example is not normative.
+<!-- Based on the definition above and that there are a significant number of optional sub-elements it is informative to show a minimum conformant `verified_claims` payload.  There can be optionally much more detail included in an openid-ida-verified-claims conformant `verified_claims` element when further detail needs to be transferred. The example is not normative. -->
+上記の定義及び相当数の任意のサブ要素が存在することに基づき, 最低限の適合性を持つ`verified_claims` のペイロードを示すことは有益である. さらに詳細な内容を転送する必要がある場合は, openid-ida-verified-claims に準拠した`verified_claims` 要素を, さらに任意で詳細に含めることができる. この例は規範的なものではない.
 
 <{{examples/response/ida_minimum.json}}
 
 ### evidence Element {#evidence_element}
 
-Members of the `evidence` array are structured with the following elements:
+<!-- Members of the `evidence` array are structured with the following elements: -->
+`evidence` 配列の要素は, 次の要素で構成されている:
 
 <!-- `type`: REQUIRED. The value defines the type of the evidence. -->
 `type`: REQUIRED. エビデンスのタイプを定義する値．
@@ -244,10 +268,10 @@ Members of the `evidence` array are structured with the following elements:
 * `vouch`: Verification based on an attestation given by an approved or recognized natural person declaring they believe that the Claim(s) presented by the End-User are, to the best of their knowledge, genuine and true.
 * `electronic_signature`: Verification based on the use of an electronic signature that can be uniquely linked to the End-User and is capable of identifying the signatory, e.g. an eIDAS Advanced Electronic Signature (AES) or Qualified Electronic Signature (QES).
 -->
-* `document`: エンドユーザーから提供されたパスポート，ID カード，公的機関が署名した PDF など，物理的または電子的文章に基づく検証．
+* `document`: End-User から提供されたパスポート，ID カード，公的機関が署名した PDF など，物理的または電子的文章に基づく検証．
 * `electronic_record`: 政府機関，銀行，公共事業者，信用調査機関など，承認，認知，規制，または認定されたソースから電子的に取得したデータまたは情報に基づく検証．
 * `vouch`: 承認または認知された自然人が，Claim(s) が正規かつ真実であると彼らの知る限り信じていることを宣言することによって与えられた証明に基づく検証．
-* `electronic_signature`: Verification based on the use of an electronic signature that can be uniquely linked to the End-User and is capable of identifying the signatory, e.g. an eIDAS Advanced Electronic Signature (AES) or Qualified Electronic Signature (QES).
+* `electronic_signature`: End-User に一意にリンク可能で, かつ署名者を識別できる電子署名の使用に基づく Verification. eIDAS 高度電子署名 (AES) または適格電子署名 (QES).
 
 <!-- `attachments`: OPTIONAL. Array of JSON objects representing attachments like photocopies of documents or certificates. Structure of members of the `attachments` array is described in [@!Attachments]. -->
 `attachments`: OPTIONAL. ドキュメントや証明書のコピーなどの添付ファイルを表す JSON オブジェクトの配列． Structure of members of the `attachments` array is described in [@!Attachments].
@@ -303,13 +327,21 @@ Members of the `evidence` array are structured with the following elements:
     * `country_code`: OPTIONAL. "USA" や "JPN" のような ISO 3166/ICAO 3-letter codes [@!ICAO-Doc9303] で，ドキュメントを発行した国や超国家組織を表す文字列．状況によっては，互換性の理由から 2-letter ICAO codes が使用されるかもしれない (MAY)．
     * `jurisdiction`: OPTIONAL. 発行者が管轄する地域/州/件/市町村の名前を含む文字列 (この情報が一般的な知識でないか，住所から導き出せない場合)．
 
-* `derived_claims`: OPTIONAL. JSON object containing Claims about the End-User which were derived from the document described in the evidence array member it is part of. When used the `derived_claims` element has the following conditions:
+<!-- * `derived_claims`: OPTIONAL. JSON object containing Claims about the End-User which were derived from the document described in the evidence array member it is part of. When used the `derived_claims` element has the following conditions:
     * The `derived_claims` element MAY contain any of the Claims defined in Section 5.1 of the OpenID Connect specification [@!OpenID] and the Claims defined in [@OpenID4IDAClaims].
     * The `derived_claims` element MAY also contain other End-User Claims (not defined in the OpenID Connect specification [@!OpenID] nor in [@OpenID4IDAClaims]) derived from the document described in the evidence array member it is part of.
     * End-User Claims contained in a `derived_claims` element MUST have corresponding Claims in the `claims` element of `verified_claims`.
     * When the `derived_claims` element is used it SHOULD be present in all members of the `evidence` array and all Claims under the `claims` element of `verified_claims` SHOULD have a corresponding Claim in at least one `derived_claims` element.
     * Claim names MAY be annotated with language tags as specified in Section 5.2 of the OpenID Connect specification [@!OpenID].
-    * When it is present the `derived_claims` element MUST NOT be empty.
+    * When it is present the `derived_claims` element MUST NOT be empty. -->
+ 
+* `derived_claims`: OPTIONAL. evidence 配列のメンバーの一部として記述された, ドキュメントに由来する End-User に関する Claim を含む JSON オブジェクト. `derived_claims` 要素を使用する場合, 次の条件が存在する:
+    * `derived_claims` 要素は, OpenID Connect の仕様 [@!OpenID] または [@OpenID4IDAClaims] で定義される Claim のいずれかを含めることができる(MAY).
+    * `derived_claims` 要素は, evidence 配列のメンバーの一部として記述された, ドキュメントに由来する (OpenID Connect の仕様[@!OpenID] でも[@OpenID4IDAClaims] でも定義されていない) 他の End-User に関する Claim を含めることもできる(MAY).
+    * `derived_claims` 要素に含まれるEnd-User Claim は, `verified_claims` の `claims` 要素に対応する Claim を持たなければならない(MUST).
+    * `derived_claims` 要素が使用される場合, `evidence` 配列の全ての要素が存在している必要があり, `verified_claims` の`claims` 要素の下にあるすべての Claim は少なくとも一つの `derived_claims` に対応する Claim を持っている必要がある (SHOULD).
+    * Claim 名には, OpenID Connect の仕様 [@!OpenID] のセクション5.2で指定されているように, 言語タグの注釈をつけることができる(MAY).
+    * `derived_claims` 要素が存在する場合, 空欄になってはならない(MUST).
 
 #### Evidence Type `electronic_record`
 
@@ -359,11 +391,11 @@ Members of the `evidence` array are structured with the following elements:
     * OpenID Connect `address` Claim (see [@!OpenID]) のすべての要素: OPTIONAL.
     * `country_code`: OPTIONAL. "USA" や "JPN" のような ISO 3166/ICAO 3-letter codes [@!ICAO-Doc9303] で，エビデンスを発行した国や超国家組織を表す文字列．状況によっては，互換性の理由から 2-letter ICAO codes が使用されるかもしれない (MAY)．
     * `jurisdiction`: OPTIONAL. ソースが管轄する地域/州/件/市町村の名前を含む文字列 (一般的な知識でないか，住所から導き出せない場合)．
-* `derived_claims`: OPTIONAL. JSON object containing Claims about the End-User which were derived from the electronic record described in the evidence array member it is part of.
-    * The `derived_claims` element MAY contain any of the Claims defined in Section 5.1 of the OpenID Connect specification [@!OpenID] and the Claims defined in [@OpenID4IDAClaims].
-    * The `derived_claims` element MAY also contain other End-User Claims (not defined in the OpenID Connect specification [@!OpenID] nor in [@OpenID4IDAClaims]) derived from the electronic record described in the evidence array member it is part of.
-    * Claim names MAY be annotated with language tags as specified in Section 5.2 of the OpenID Connect specification [@!OpenID].
-    * When it is present the `derived_claims` element MUST NOT be empty.
+* `derived_claims`: OPTIONAL. evidence 配列のメンバーの一部として記述された, 電子記録に由来する End-User に関する Claim を含む JSON オブジェクト.
+    * `derived_claims` 要素は, OpenID Connect の仕様[@!OpenID] または[@OpenID4IDAClaims] で定義されるClaim のいずれかを含めることができる(MAY).
+    * `derived_claims` 要素は, evidence 配列のメンバーの一部として記述された, 電子記録に由来する (OpenID Connect の仕様[@!OpenID] でも[@OpenID4IDAClaims] でも定義されていない) 他の End-User に関する Claim を含めることができる (MAY).
+    * Claim 名には, OpenID Connect の仕様[@!OpenID] のセクション5.2で指定されているように, 言語タグの注釈をつけることができる(MAY).
+    * `derived_claims` 要素が存在する場合, 空欄になってはならない(MUST).
 
 #### Evidence Type `vouch`
 
@@ -409,21 +441,21 @@ Members of the `evidence` array are structured with the following elements:
     * When it is present the `derived_claims` element MUST NOT be empty.
 -->
 * `type`: REQUIRED. 証拠のタイプを表す文字列．事前定義された証拠値については [@!predefined_values_page] 参照. Claims Provider は Claims Recipients がアサーションを処理できないか，監査目的でこの値を保存するか，特注のビジネスロジックを適用する場合，事前定義された値以外を使用してもよい (MAY).
-* `reference_number`: OPTIONAL. エンドユーザーについて与えられた証拠を一意に識別する識別子/番号を表す文字列．
+* `reference_number`: OPTIONAL. End-User について与えられた証拠を一意に識別する識別子/番号を表す文字列．
 * `date_of_issuance`: OPTIONAL. ISO 8601 [@!ISO8601] `YYYY-MM-DD` 形式で表す，vouch が作成されたされた日付.
 * `date_of_expiry`: OPTIONAL. ISO 8601 [@!ISO8601] `YYYY-MM-DD` 形式で表す，エビデンスの有効期限の日付.
 * `voucher`: OPTIONAL. 証拠を提供するエンティティに関する情報を含む JSON オブジェクト．このオブジェクトは下記のプロパティで構成される:
-    * `name`: OPTIONAL. OpenID Connect 仕様の Section 5.1 で定義されているのと同じ形式で，エンドユーザー Claim の証拠/参照を提供する人の名前を含む文字列．
-    * `birthdate`: OPTIONAL. OpenID Connect 仕様の Section 5.1 で定義されているのと同じ形式で，エンドユーザー Claim の証拠/参照を提供する人の誕生日を含む文字列．
+    * `name`: OPTIONAL. OpenID Connect 仕様の Section 5.1 で定義されているのと同じ形式で，End-User Claim の証拠/参照を提供する人の名前を含む文字列．
+    * `birthdate`: OPTIONAL. OpenID Connect 仕様の Section 5.1 で定義されているのと同じ形式で，End-User Claim の証拠/参照を提供する人の誕生日を含む文字列．
     * OpenID Connect `address` Claim (see [@!OpenID]) のすべての要素: OPTIONAL.
     * `country_code`: OPTIONAL. "USA" や "JPN" のような ISO 3166/ICAO 3-letter codes [@!ICAO-Doc9303] で，エビデンスを発行した国や超国家組織を表す文字列．状況によっては，互換性の理由から 2-letter ICAO codes が使用されるかもしれない (MAY)．
     * `occupation`: OPTIONAL. 証拠/参照を与える人の職業または他の権限を含む文字列 .
     * `organization`: OPTIONAL. voucher が表す組織の名前を含む文字列．
-* `derived_claims`: OPTIONAL. JSON object containing Claims about the End-User which were derived from the vouch described in the evidence array member it is part of (an example is presented later in this document)
-    * The `derived_claims` element MAY contain any of the Claims defined in Section 5.1 of the OpenID Connect specification [@!OpenID] and the Claims defined in [@OpenID4IDAClaims].
-    * The `derived_claims` element MAY also contain other End-User Claims (not defined in the OpenID Connect specification [@!OpenID] nor in [@OpenID4IDAClaims]) derived from the vouch described in the evidence array member it is part of.
-    * Claim names MAY be annotated with language tags as specified in Section 5.2 of the   OpenID Connect specification [@!OpenID].
-    * When it is present the `derived_claims` element MUST NOT be empty.
+* `derived_claims`: OPTIONAL. evidence 配列のメンバーの一部として記述された, vouch に由来する End-User に関する Claim を含む JSON オブジェクト. `derived_claims` 要素を使用する場合, 次の条件が存在する:
+    * `derived_claims` 要素は OpenID Connectの仕様 [@!OpenID] のセクション5.1及び[@OpenID4IDAClaims] で定義されたClaim のいずれかを含むことができる(MAY).
+    * `derived_claims` 要素は, evidence 配列のメンバーの一部として記述された, vouch に由来する (OpenID Connect の仕様[@!OpenID] でも[@OpenID4IDAClaims] でも定義されていない) 他の End-User に関する Claim も含めることができる(MAY).
+    * Claim 名には, OpenID Connect の仕様 [@!OpenID] のセクション5.2で指定されているように, 言語タグの注釈をつけることができる(MAY).
+    * `derived_claims` 要素が存在する場合, 空欄になってはならない(MUST).
 
 #### Evidence Type `electronic_signature`
 
@@ -447,11 +479,11 @@ Members of the `evidence` array are structured with the following elements:
 * `issuer`: REQUIRED. 署名者の証明書を発行した認証局を表す文字列.
 * `serial_number`: REQUIRED. 署名に使用される証明書のシリアル番号を表す文字列.
 * `created_at`: OPTIONAL. ISO 8601 [@!ISO8601] `YYYY-MM-DDThh:mm[:ss]TZD` 形式で表す，署名の作成された日付.
-* `derived_claims`: OPTIONAL. JSON object containing Claims about the End-User which were derived from the electronic signature described in the evidence array member it is part of.
-    * The `derived_claims` element MAY contain any of the Claims defined in Section 5.1 of the OpenID Connect specification [@!OpenID] and the Claims defined in [@OpenID4IDAClaims].
-    * The `derived_claims` element MAY also contain other End-User Claims derived from the electronically signed object described in the evidence array member it is part of, such as elements of an advanced electronic signature described under eIDAS used to uniquely link the signed object to the signatory.
-    * Claim names MAY be annotated with language tags as specified in Section 5.2 of the OpenID Connect specification [@!OpenID].
-    * When it is present the `derived_claims` element MUST NOT be empty.
+* `derived_claims`: OPTIONAL. evidence 配列のメンバーの一部として記述された, 電子署名に由来する End-User に関する Claim を含む JSON オブジェクト. `derived_claims` 要素を使用する場合, 次の条件が存在する:
+    * `derived_claims` 要素は OpenID Connect の仕様 [@!OpenID] のセクション5.1及び[@OpenID4IDAClaims] で定義された Claim のいずれかを含むことができる(MAY).
+    * `derived_claims` 要素は署名者に対して署名されたオブジェクトを一意に紐づけるために使用される eIDAS で説明される高度電子署名の要素などの, evidence 配列のメンバーの一部として記述された, 電子的に署名されたオブジェクトに由来する他の End-User に関する Claim も含めることができる(MAY).
+    * Claim 名には, OpenID Connect の仕様 [@!OpenID] のセクション5.2で指定されているように, 言語タグの注釈をつけることができる(MAY).
+    * `derived_claims` 要素が存在する場合, 空欄になってはならない(MUST).
 
 ### Attachments {#attachments}
 
@@ -465,7 +497,7 @@ identity verification プロセス中に，特定のドキュメントアーテ�
 * certificates of electronic signatures.
 -->
 * 検証プロセス自体を文章化/証明する，記入済みかつ署名済みフォームのスキャン
-* エンドユーザーの identity を確認するために使用されるドキュメントのスキャンまたは写真コピー
+* End-User の identity を確認するために使用されるドキュメントのスキャンまたは写真コピー
 * 検証プロセスのビデオ録画
 * 電子署名の証明書
 
@@ -477,7 +509,8 @@ Claims Provider によってサポートされ，Claims Recipient から要求�
 
 ## Examples
 
-This section contains JSON snippets showing further examples of `verified_claims` described in this document.
+<!-- This section contains JSON snippets showing further examples of `verified_claims` described in this document. -->
+このセクションには, 本ドキュメントで説明されている`verified_claims` の追加の例を示す JSON スニペットが含まれている.
 
 ### Framework with assurance level and associated claims
 
@@ -733,7 +766,8 @@ This section contains JSON snippets showing further examples of `verified_claims
 
 ## JSON Web Token Claims Registration
 
-This specification requests registration of the following value in the IANA "JSON Web Token Claims Registry" established by [@!RFC7519].
+<!-- This specification requests registration of the following value in the IANA "JSON Web Token Claims Registry" established by [@!RFC7519]. -->
+この仕様は [@!RFC7519] によって確立された IANA の "JSON Web Token Claims Registry" に次の値を登録することを要求している.
 
 ### Registry Contents
 
@@ -742,20 +776,36 @@ This specification requests registration of the following value in the IANA "JSO
 Claim Name:
 : `verified_claims`
 
+<!--
 Claim Description:
 : A structured Claim containing end-user claims and the details of how those end-user claims were assured.
+-->
+Claim Description:
+: End-User Claim とそれらの Claim がどのように保証されているかの詳細を含む構造化された Claim.
 
 Change Controller:
 : eKYC and Identity Assurance Working Group - openid-specs-ekyc-ida@lists.openid.net
 
+<!--
 Specification Document(s):
 : Section [Claims](#claims) of this document
+-->
+Specification Document(s):
+: 本ドキュメントの [Claims](#claims) セクション
+
 
 # Acknowledgements {#Acknowledgements}
 
+<!--
 The following people at yes.com and partner companies contributed to the concept described in the initial contribution to this specification: Karsten Buch, Lukas Stiebig, Sven Manz, Waldemar Zimpfer, Willi Wiedergold, Fabian Hoffmann, Daniel Keijsers, Ralf Wagner, Sebastian Ebling, Peter Eisenhofer.
+-->
+本仕様の初稿で説明されている概念には, yes.com の次の人々とパートナー企業が貢献した: Karsten Buch, Lukas Stiebig, Sven Manz, Waldemar Zimpfer, Willi Wiedergold, Fabian Hoffmann, Daniel Keijsers, Ralf Wagner, Sebastian Ebling, Peter Eisenhofer.
 
+<!--
 We would like to thank Julian White, Bjorn Hjelm, Stephane Mouy, Joseph Heenan, Vladimir Dzhuvinov, Azusa Kikuchi, Naohiro Fujie, Takahiko Kawasaki, Sebastian Ebling, Marcos Sanz, Tom Jones, Mike Pegman, Michael B. Jones, Jeff Lombardo, Taylor Ongaro, Peter Bainbridge-Clayton, Adrian Field, George Fletcher, Tim Cappalli, Michael Palage, Sascha Preibisch, Giuseppe De Marco, Nick Mothershaw, Hodari McClain, Dima Postnikov and Nat Sakimura for their valuable feedback and contributions that helped to evolve this specification.
+-->
+我々は本仕様の発展の助けとなる, 価値あるフィードバックと貢献をしてくれたJulian White, Bjorn Hjelm, Stephane Mouy, Joseph Heenan, Vladimir Dzhuvinov, Azusa Kikuchi, Naohiro Fujie, Takahiko Kawasaki, Sebastian Ebling, Marcos Sanz, Tom Jones, Mike Pegman, Michael B. Jones, Jeff Lombardo, Taylor Ongaro, Peter Bainbridge-Clayton, Adrian Field, George Fletcher, Tim Cappalli, Michael Palage, Sascha Preibisch, Giuseppe De Marco, Nick Mothershaw, Hodari McClain, Dima Postnikov, Nat Sakimura に感謝する.
+
 
 # Notices
 
