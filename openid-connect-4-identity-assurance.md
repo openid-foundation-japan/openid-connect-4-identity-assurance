@@ -282,19 +282,24 @@ RP は `document`要素内の特定のデータの存在を要求するも出来
 
 ### value/values
 
-The RP can limit the possible values of the elements `trust_framework`, `evidence/method`, `evidence/check_details`, and `evidence/document/type` by utilizing the `value` or `values` fields and the element `evidence/type` by utilizing the `value` field.
+<!-- The RP can limit the possible values of the elements `trust_framework`, `evidence/method`, `evidence/check_details`, and `evidence/document/type` by utilizing the `value` or `values` fields and the element `evidence/type` by utilizing the `value` field. -->
+RP は `value` または `values` フィールドと `evidence/type` 要素を利用することで，`trust_framework`, `evidence/method`, `evidence/check_details`, 及び `evidence/document/type` 要素の `value` フィールドで利用可能な値を制限出来る．
 
-Note: Examples on the usage of a restriction on `evidence/type` were given in the previous section.
+<!-- Note: Examples on the usage of a restriction on `evidence/type` were given in the previous section. -->
+注: `evidence/type` の制限の使用例は，以前のセクションで示した．
 
-The following example shows how an RP may request Claims either complying with trust framework `gold` or `silver`.
+<!-- The following example shows how an RP may request Claims either complying with trust framework `gold` or `silver`. -->
+次の例は，RP がトラストフレームワーク `gold` または `silver` のいずれかに準拠した Claims をリクエストする方法を示す．
 
 <{{examples/request/verification_claims_different_trust_frameworks.json}}
 
-The following example shows that the RP wants to obtain an attestation based on the German Anti Money Laundering Law (trust framework `de_aml`) and limited to End-Users who were identified in a bank branch in person (physical in person proofing - method `pipp`) using either an `idcard` or a `passport`.
+<!-- The following example shows that the RP wants to obtain an attestation based on the German Anti Money Laundering Law (trust framework `de_aml`) and limited to End-Users who were identified in a bank branch in person (physical in person proofing - method `pipp`) using either an `idcard` or a `passport`. -->
+次の例は，RP がドイツのマネーロンダリング防止法 (トラストフレームワーク `de_aml`) に基づき，`idcard` または `passport` を利用して銀行の窓口にて対面で識別された (物理的な身元確認 - `ppid` 手法) エンドユーザーに限定した証明の取得を希望していることを示す．
 
 <{{examples/request/verification_aml.json}}
 
-The OP MUST NOT ignore some or all of the query restrictions on possible values and MUST NOT deliver available verified/verification data that does not match these constraints.
+<!-- The OP MUST NOT ignore some or all of the query restrictions on possible values and MUST NOT deliver available verified/verification data that does not match these constraints. -->
+OP は可能な値のクエリ制約の一部または全部を無視してはならず (MUST NOT)，これらの制約に一致しない利用可能な検証済み/検証データを提供してはならない (MUST NOT)．
 
 ### max_age
 
