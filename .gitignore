@@ -1,1 +1,6 @@
+*.xml
+*.txt
+oidf.code-workspace
+tests/
+
 .DS_Store

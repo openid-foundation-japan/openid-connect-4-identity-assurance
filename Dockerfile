@@ -1,18 +1,19 @@
-FROM python:3.7-alpine
+FROM ghcr.io/ietf-tools/xml2rfc-base:latest
+
+ARG MMARK_VERSION=2.2.31
 
 WORKDIR /opt
 
-RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache \
-        gcc \
-        libc-dev \
-        libxml2-dev \
-        libxslt-dev && \
-    pip install xml2rfc
+RUN cd /usr/local/bin && \
+    wget https://github.com/mmarkdown/mmark/releases/download/v${MMARK_VERSION}/mmark_${MMARK_VERSION}_linux_amd64.tgz -O/tmp/mmark.tgz && \
+    tar xzf /tmp/mmark.tgz
 
-RUN cd /tmp && \
-    wget https://github.com/mmarkdown/mmark/releases/download/v2.0.52/mmark_2.0.52_linux_amd64.tgz && \
-    tar zxvf mmark_2.0.52_linux_amd64.tgz && \
-    mv mmark /usr/local/bin/mmark
+RUN apt-get update &&\
+    apt-get install -y git
 
+RUN cd /usr/local/src && \
+    git clone https://github.com/wolfcw/libfaketime.git && \
+    cd libfaketime/src && \
+    make install
+
+ENV LD_PRELOAD=/usr/local/lib/faketime/libfaketime.so.1

@@ -1,0 +1,18 @@
+{
+  "userinfo": {
+    "verified_claims": {
+      "verification": {
+        "trust_framework": {
+          "values": [
+            "gold",
+            "silver"
+          ]
+        }
+      },
+      "claims": {
+        "given_name": null,
+        "family_name": null
+      }
+    }
+  }
+}

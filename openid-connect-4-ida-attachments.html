@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Han,Hiragana,Katakana,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>OpenID Attachments 1.0 draft</title>
+<meta content="Torsten Lodderstedt" name="author">
+<meta content="Daniel Fett" name="author">
+<meta content="Mark Haine" name="author">
+<meta content="Alberto Pulido" name="author">
+<meta content="Kai Lehmann" name="author">
+<meta content="Kosuke Koiwai" name="author">
+<meta content="
+       このドキュメントは，JSON ペイロードのコンテキストでバイナリデータを表現する方法を定義する．これは自然人のアイデンティティに関連する新しい添付ファイルを定義する OpenID Connect の拡張として，またはバイナリデータ要素を持つ他の JSON コンテキストで使用できる．この仕様は，自然人の ID に関連する新しい添付ファイルについて定義する，OpenID Connect の拡張を定義する．
+本仕様と前のドラフトは，OpenID Foundation の eKYC および Identity Assurance ワーキンググループの作業である． 
+    " name="description">
+<meta content="xml2rfc 3.20.0" name="generator">
+<meta content="security" name="keyword">
+<meta content="openid" name="keyword">
+<meta content="identity assurance" name="keyword">
+<meta content="ekyc" name="keyword">
+<meta content="claims" name="keyword">
+<meta content="openid-connect-4-ida-attachments-1_0-00" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.20.0
+    Python 3.10.12
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.3
+    lxml 4.9.4
+    platformdirs 4.2.0
+    pycountry 23.12.11
+    PyYAML 6.0.1
+    requests 2.31.0
+    setuptools 69.1.1
+    six 1.16.0
+    wcwidth 0.2.13
+    weasyprint 61.2
+-->
+<link href="openid-connect-4-ida-attachments.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necessary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
+@viewport {
+  zoom: 1.0;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  overflow-wrap: break-word;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  display: table;
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre {
+  background-color: #f9f9f9;
+  font-family: var(--font-mono);
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+blockquote > *:last-child {
+  margin-bottom: 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    float: none;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.refSubseries {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: var(--font-sans);
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  .breakable pre {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The following is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+.sourcecode pre,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .artwork > pre,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background slightly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottom margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the compact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div.sourcecode:first-child,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type:only-child {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+</head>
+<body class="xml2rfc">
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left"></td>
+<td class="center">openid-connect-4-ida-attachments-1_0</td>
+<td class="right">October 2024</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Lodderstedt, et al.</td>
+<td class="center">Standards Track</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">eKYC-IDA</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2024-10-01" class="published">1 October 2024</time>
+    </dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">T. Lodderstedt</div>
+<div class="org">sprind.org</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Fett</div>
+<div class="org">Authlete</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Haine</div>
+<div class="org">Considrd.Consulting Ltd</div>
+</div>
+<div class="author">
+      <div class="author-name">A. Pulido</div>
+<div class="org">Santander</div>
+</div>
+<div class="author">
+      <div class="author-name">K. Lehmann</div>
+<div class="org">1&amp;1 Mail &amp; Media Development &amp; Technology GmbH</div>
+</div>
+<div class="author">
+      <div class="author-name">K. Koiwai</div>
+<div class="org">KDDI Corporation</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">OpenID Attachments 1.0 draft</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">このドキュメントは，JSON ペイロードのコンテキストでバイナリデータを表現する方法を定義する．これは自然人のアイデンティティに関連する新しい添付ファイルを定義する OpenID Connect の拡張として，またはバイナリデータ要素を持つ他の JSON コンテキストで使用できる．この仕様は，自然人の ID に関連する新しい添付ファイルについて定義する，OpenID Connect の拡張を定義する．
+本仕様と前のドラフトは，OpenID Foundation の eKYC および Identity Assurance ワーキンググループの作業である．<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note" id="section-note.1">
+      <h2 id="name-introduction">
+<a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-note.1-1">この仕様では，さまざまなコンテキストで使用するための JWT クレームとして添付ファイル要素を定義する．<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">添付ファイル要素は， <span>[<a href="#OpenID4IDA" class="cite xref">OpenID4IDA</a>]</span> で行われた作業，特に ID 保証プロセスの一部として使用されるさまざまなエビデンスの画像を含める方法に触発されたものである．ただし，JSON 以外の構造化データを埋め込んだり参照したりする機能が役立つケースが他にもあると予想される．<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+</section>
+<section class="note" id="section-note.2">
+      <h2 id="name-warning">
+<a href="#name-warning" class="section-name selfRef">Warning</a>
+      </h2>
+<p id="section-note.2-1">This document is not an OIDF International Standard. It is distributed for
+review and comment. It is subject to change without notice and may not be
+referred to as an International Standard.
+Recipients of this draft are invited to submit, with their comments,
+notification of any relevant patent rights of which they are aware and to
+provide supporting documentation.<a href="#section-note.2-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note" id="section-note.3">
+      <h2 id="name-foreword">
+<a href="#name-foreword" class="section-name selfRef">Foreword</a>
+      </h2>
+<p id="section-note.3-1">The OpenID Foundation (OIDF) promotes, protects and nurtures the OpenID community and technologies. As a non-profit international standardizing body, it is comprised by over 160 participating entities (workgroup participant). The work of preparing implementer drafts and final international standards is carried out through OIDF workgroups in accordance with the OpenID Process. Participants interested in a subject for which a workgroup has been established have the right to be represented in that workgroup. International organizations, governmental and non-governmental, in liaison with OIDF, also take part in the work. OIDF collaborates closely with other standardizing bodies in the related fields.<a href="#section-note.3-1" class="pilcrow">¶</a></p>
+<p id="section-note.3-2">Final drafts adopted by the Workgroup through consensus are circulated publicly for the public review for 60 days and for the OIDF members for voting. Publication as an OIDF Standard requires approval by at least 50% of the members casting a vote. There is a possibility that some of the elements of this document may be subject to patent rights. OIDF shall not be held responsible for identifying any or all such patent rights.<a href="#section-note.3-2" class="pilcrow">¶</a></p>
+</section>
+<section class="note" id="section-note.4">
+      <h2 id="name-notational-conventions">
+<a href="#name-notational-conventions" class="section-name selfRef">Notational conventions</a>
+      </h2>
+<p id="section-note.4-1">The keywords "shall", "shall not", "should", "should not", "may", and "can" in
+this document are to be interpreted as described in ISO Directive Part 2
+<span>[<a href="#ISODIR2" class="cite xref">ISODIR2</a>]</span>. These keywords are not used as dictionary terms such that any
+occurrence of them shall be interpreted as keywords and are not to be
+interpreted with their natural language meanings.<a href="#section-note.4-1" class="pilcrow">¶</a></p>
+</section>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-scope" class="internal xref">Scope</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-normative-references" class="internal xref">Normative references</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-terms-and-definitions" class="internal xref">Terms and definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-attachments" class="internal xref">Attachments</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-embedded-attachments" class="internal xref">Embedded attachments</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-external-attachments" class="internal xref">External attachments</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-external-attachment-validat" class="internal xref">External attachment validation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-privacy-considerations" class="internal xref">Privacy considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-client-registration-and-man" class="internal xref">Client registration and management</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-op-metadata" class="internal xref">OP metadata</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-example-requests" class="internal xref">Example requests</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.1">
+                    <p id="section-toc.1-1.8.2.1.2.1.1"><a href="#section-8.1.1" class="auto internal xref">8.1.1</a>.  <a href="#name-verification-of-claims-by-t" class="internal xref">Verification of claims by trust framework with a document and attachments</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-example-responses" class="internal xref">Example responses</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.1">
+                    <p id="section-toc.1-1.8.2.2.2.1.1"><a href="#section-8.2.1" class="auto internal xref">8.2.1</a>.  <a href="#name-document-with-external-atta" class="internal xref">Document with external attachments</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.2">
+                    <p id="section-toc.1-1.8.2.2.2.2.1"><a href="#section-8.2.2" class="auto internal xref">8.2.2</a>.  <a href="#name-utility-statement-with-atta" class="internal xref">Utility statement with attachments</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.3">
+                    <p id="section-toc.1-1.8.2.2.2.3.1"><a href="#section-8.2.3" class="auto internal xref">8.2.3</a>.  <a href="#name-vouch-with-embedded-attachm" class="internal xref">Vouch with embedded attachments</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-normative-references-2" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-translation-references" class="internal xref">Translation References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-notices" class="internal xref">Notices</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-C" class="auto internal xref">Appendix C</a>.  <a href="#name-document-history" class="internal xref">Document History</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-D" class="auto internal xref">Appendix D</a>.  <a href="#name-translator" class="internal xref">Translator</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="scope">
+<section id="section-1">
+      <h2 id="name-scope">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
+      </h2>
+<p id="section-1-1">このドキュメントでは，埋め込み添付ファイルと外部添付ファイルの使用方法を定義する．<a href="#section-1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="normative-references">
+<section id="section-2">
+      <h2 id="name-normative-references">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-normative-references" class="section-name selfRef">Normative references</a>
+      </h2>
+<p id="section-2-1">Normative References については Section 9 参照．<a href="#section-2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terms-and-definitions">
+<section id="section-3">
+      <h2 id="name-terms-and-definitions">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-terms-and-definitions" class="section-name selfRef">Terms and definitions</a>
+      </h2>
+<p id="section-3-1">このドキュメントでは，用語と定義は記載されていない．<a href="#section-3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="attachments">
+<section id="section-4">
+      <h2 id="name-attachments">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-attachments" class="section-name selfRef">Attachments</a>
+      </h2>
+<p id="section-4-1">Identity verification プロセス中でエビデンスが使用される場合，特定のドキュメントアーティファクト(そのエビデンスの画像など)を提示する必要があり，トラストフレームワークに応じて受信者が一定期間保存する必要があるかもしれない．これらのアーティファクトは，例えば，監査や品質管理中などの際に後から確認することができる．これらのアーティファクトには次のものが含まれるが，これらに限定されない:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-4-2.1">検証プロセス自体を文章化/証明する，記入済みかつ署名済みフォームのスキャン<a href="#section-4-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="section-4-2.2">エンドユーザーの identity を確認するために使用されるドキュメントのスキャンまたは写真<a href="#section-4-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="section-4-2.3">検証プロセスのビデオ録画<a href="#section-4-2.3" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="section-4-2.4">電子署名の証明書<a href="#section-4-2.4" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-4-3">OpenID Connect を利用していて RP から要求された場合，これらのアーティファクトは ID トークンの一部として含めることが出来，特に <span>[<a href="#OpenID4IDA" class="cite xref">OpenID4IDA</a>]</span> の <code>verified_claims</code> 要素の一部として含めることで，RP がこれらのアーティファクトを他の <code>verified_claims</code> 情報と一緒に保存することが出来る．<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">添付ファイルは JSON オブジェクト形式で表現される．本ドキュメントでは2種類の表現が可能である:<a href="#section-4-4" class="pilcrow">¶</a></p>
+<div id="embedded-attachments">
+<section id="section-4.1">
+        <h3 id="name-embedded-attachments">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-embedded-attachments" class="section-name selfRef">Embedded attachments</a>
+        </h3>
+<p id="section-4.1-1">(コンテンツ自身を含む) ドキュメントのすべての情報は，以下の要素を持つ JSON オブジェクト内で提供される:<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2"><code>desc</code>: OPTIONAL. ドキュメントの説明. ファイル名または単なるコンテンツの説明にすることができる．使用する言語は指定されていないが，通常 OP の基礎となるトラストフレームワークの管轄に拘束される．<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3"><code>content_type</code>: REQUIRED. ドキュメントのコンテンツ (MIME) タイプ． <span>[<a href="#RFC6838" class="cite xref">RFC6838</a>]</span> 参照．マルチパートまたはメッセージメディアタイプは許可されない．例: "image/png"<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4"><code>content</code>: REQUIRED. ドキュメントコンテンツの Base64 エンコード表現. <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>参照.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">以下の例は，UserInfo エンドポイントのレスポンス内に埋め込まれた添付ファイルを示す．添付ドキュメントの実際の内容は切り捨てられている:<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-4.1-6">
+<pre>{
+  "sub": "248289761001",
+  "email": "janedoe@example.com",
+  "attachments": [
+    {
+      "desc": "Front of id document",
+      "content_type": "image/png",
+      "content": "Wkd0bWFtVnlhWFI2Wlc0Mk16VER2RFUyY0RRMWFUbDBNelJ1TlRjd31dzdaM1pTQXJaWGRsTXpNZ2RETmxDZwo="
+    },
+    {
+      "desc": "Back of id document",
+      "content_type": "image/png",
+      "content": "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAADSFsjdkhjwhAABJRU5ErkJggg=="
+    }
+  ]
+}
+</pre><a href="#section-4.1-6" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-7">注: 埋め込み添付ファイルはサイズが大きいため，アクセストークンまたは ID トークンなどのオブジェクトに埋め込む場合，必ずしも適切ではない．<a href="#section-4.1-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="external-attachments">
+<section id="section-4.2">
+        <h3 id="name-external-attachments">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-external-attachments" class="section-name selfRef">External attachments</a>
+        </h3>
+<p id="section-4.2-1">External attachments は <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span> で定義されている分散 Claim と似ている．外部ドキュメントへの参照は，以下の要素を持つ JSON オブジェクト内で提供される:<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2"><code>desc</code>: OPTIONAL. ドキュメントの説明. ファイル名または単なるコンテンツの説明にすることができる．使用する言語は指定されていないが，通常 OP の基礎となるトラストフレームワークの管轄に拘束される．<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3"><code>url</code>: REQUIRED. 添付ファイルを取得できる OAuth 2.0 保護されたリソースエンドポイント．プロバイダーは，このエンドポイントを保護し，権限のない者が添付ファイルを取得できないようにする必要がある (SHALL) (通常は，以下で説明するようにアクセストークンを要求する) ．エンドポイント URL は，暗号化ハッシュが <code>digest</code> 要素で与えられた値と一致する添付ファイルを返さなければならない (SHALL)．添付ファイルのコンテンツ MIME タイプは， <span>[<a href="#RFC6838" class="cite xref">RFC6838</a>]</span> に従って，content-type HTTP レスポンスヘッダーで示されなければならない (SHALL)．マルチパートまたはメッセージメディアタイプは，使用しないものとする (SHALL NOT)．<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4"><code>access_token</code>: OPTIONAL. 与えられた <code>url</code> から添付ファイルを取得できるようにする <code>string</code> タイプの Access Token．別のトークンタイプまたはメソッドが Client とネゴシエートされていない限り，添付ファイルは OAuth 2.0 Bearer Token Usage <span>[<a href="#RFC6750" class="cite xref">RFC6750</a>]</span> プロトコルを使用してリクエストしなければならず (SHALL)， OP はこのメソッドをサポートしなければならない (SHALL)．他のトークンタイプの仕様は本ドキュメントの範囲外である．<code>access_token</code> 要素が利用できない場合，RP は Token Response で OP によって発行された Access Token を利用しなければならず (SHALL)，添付ファイルを要求する時，RP は UserInfo エンドポイントにアクセスするときと同じ方法を使用しなければならない (SHALL)．この要素の値が <code>null</code> の場合，添付ファイルを要求するために Access Token は使用されず，RP は Token Response によって発行された Access Token を使用してはならない (SHALL NOT)．この場合，OP は添付ファイルを保護するための他の有効な方法を組み込み，それに応じて RP に通知/指示しなければならない (SHALL)．<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5"><code>exp</code>: OPTIONAL. "exp" (有効期限) クレームは，<code>url</code> 要素で定義されている，リソースエンドポイントから外部添付ファイルを使用できなくなる有効期限を識別する(たとえば，<code>access_token</code> が期限切れになるか，その時点でドキュメントが削除される可能性がある．)．実装者は，クロックスキューを考慮するために，通常は数分以下の小さな余裕を提供してもよい (MAY)．その値は，<span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span> に従って NumericDate の値を含む数値でなければならない (SHALL)．<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-6"><code>digest</code>: REQUIRED. ペイロードのバイトに対して取得されたドキュメントコンテンツの暗号化ハッシュの詳細を含む JSON オブジェクト(HTTP レスポンスの表現などではなく)．JSON オブジェクトは以下の要素を持つ:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-4.2-7.1">
+            <code>alg</code>: REQUIRED. 暗号化ハッシュの計算に使用されるアルゴリズムを指定する．アルゴリズムは，Client の登録または管理の間に RP と OP の間で事前にネゴシエートされている．<a href="#section-4.2-7.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-4.2-7.2">
+            <code>value</code>: REQUIRED. Base64 エンコード <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> された暗号化ハッシュのバイト．<a href="#section-4.2-7.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-4.2-8">追加の外部添付ファイルやリソースを取得するためにアクセストークンが使用されないようにするために，外部添付ファイルのアクセストークンは要求されている特定のリソースへバインディングしなければならない (SHOULD)．例えば，<code>url</code> の値を audience としてアクセストークンと関連付けることができる．これにより，リソースサーバーは提示されたアクセストークンの audience がアクセスされた URL と一致するかを確認し，一致しない場合にアクセスを拒否することで，セキュリティを強化する．同じアイデアが Resource Indicators for OAuth 2.0 <span>[<a href="#RFC8707" class="cite xref">RFC8707</a>]</span> で説明されており，発行されるアクセストークンに関連付けられる1つ以上のリソースを指定するための <code>resource</code> リクエストパラメーターを定義している．<a href="#section-4.2-8" class="pilcrow">¶</a></p>
+<p id="section-4.2-9">以下の例は external attachments を示す:<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+<div class="breakable lang-json sourcecode" id="section-4.2-10">
+<pre>{
+  "verified_claims": {
+    "verification": {
+      "trust_framework":"eidas",
+      "assurance_level": "substantial",
+      "evidence": [
+        {
+          "type": "document",
+          "method": "pipp",
+          "time": "2012-04-22T11:30Z",
+          "document_details": {
+            "type": "idcard",
+            "issuer": {
+              "name": "Stadt Augsburg",
+              "country": "DE"
+            },
+            "document_number": "53554554",
+            "date_of_issuance": "2010-03-23",
+            "date_of_expiry": "2020-03-22"
+          },
+          "attachments": [
+            {
+              "desc": "Front of id document",
+              "digest": {
+                "alg": "sha-256",
+                "value": "qC1zE5AfxylOFLrCnOIURXJUvnZwSFe5uUj8t6hdQVM="
+              },
+              "url": "https://example.com/attachments/pGL9yz4hZQ",
+              "access_token": "ksj3n283dke",
+              "exp": 1676552089
+            },
+            {
+              "desc": "Back of id document",
+              "digest": {
+                "alg": "sha-256",
+                "value": "2QcDeLJ/qeXJn4nP+v3nijMgxOBCT9WJaV0LjRS4aT8="
+              },
+              "url": "https://example.com/attachments/4Ag8IpOf95"
+            },
+            {
+              "desc": "Signed document",
+              "digest": {
+                "alg": "sha-256",
+                "value": "i3O7U79LiyKmmesIgULKT2Q8LAxNO0CpwJVcbepaYf8="
+              },
+              "url": "https://example.com/attachments/4Ag8IpOf95",
+              "access_token": null,
+              "exp": 1676552189
+            }
+          ]
+        }
+      ]
+    },
+    "claims": {
+      "given_name": "Max",
+      "family_name": "Mustermann",
+      "birthdate": "1956-01-28"
+    }
+  }
+}
+</pre><a href="#section-4.2-10" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="external-attachment-validation">
+<section id="section-4.3">
+        <h3 id="name-external-attachment-validat">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-external-attachment-validat" class="section-name selfRef">External attachment validation</a>
+        </h3>
+<p id="section-4.3-1">クライアントは，次の方法で，依存する各外部添付ファイルを検証しなければならない (SHALL) :<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="compact type-1" id="section-4.3-2">
+<li id="section-4.3-2.1">オブジェクトに必須要素 <code>url</code>，<code>digest</code> が含まれていることを確認．<a href="#section-4.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.2">リクエスト時の時刻が <code>exp</code> 要素で表される時刻より前であることを確認．<a href="#section-4.3-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.3">
+            <code>url</code> 要素で定義された URL が <code>https</code> スキームを使用していることを確認．<a href="#section-4.3-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.4">
+            <code>digest</code> 要素に <code>alg</code> と <code>value</code> キーの両方が含まれていることを確認．<a href="#section-4.3-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.5">オブジェクトの <code>url</code> 要素から添付ファイルを取得．<a href="#section-4.3-2.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.6">添付ファイルのコンテンツ MIME タイプが，content-type HTTP レスポンスヘッダーに示されていることを確認．<a href="#section-4.3-2.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.7">MIME タイプが Multipart でないことを確認 ( <span>[<a href="#RFC2046" class="cite xref">RFC2046</a>]</span> のセクション5.1を参照) ．<a href="#section-4.3-2.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.8">MIME タイプが "message" メディアタイプでないことを確認 ( <span>[<a href="#RFC5322" class="cite xref">RFC5322</a>]</span> を参照) ．<a href="#section-4.3-2.8" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.3-2.9">返却された添付ファイルに，<code>digest</code> オブジェクトの <code>value</code> で指定された値と <code>alg</code> 要素値で定義されたアルゴリズムと一致する暗号化ハッシュダイジェストがあることを確認．<a href="#section-4.3-2.9" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-4.3-3">これらの要件のいずれかが満たされない場合，添付ファイルの内容は使用せず，破棄し，信頼してはならない．<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="privacy-considerations">
+<section id="section-5">
+      <h2 id="name-privacy-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy considerations</a>
+      </h2>
+<p id="section-5-1">添付ファイルには，特定の Claim 名を使用して RP から要求されたよりも多くの個人情報が含まれる可能性が高いため，OP はいつどのような種類の添付ファイルが RP に転送されるかを，エンドユーザーが十分に認識していることを確認しなければならない (SHALL)．可能であれば，あるいは適用可能であれば，OP はエンドユーザーがトランザクションに同意する前に，これらの添付ファイルのコンテンツを確認できるようにするべきである (SHOULD)．<a href="#section-5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="client-registration-and-management">
+<section id="section-6">
+      <h2 id="name-client-registration-and-man">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-client-registration-and-man" class="section-name selfRef">Client registration and management</a>
+      </h2>
+<p id="section-6-1">External attachments が <span>[<a href="#OpenID-Registration" class="cite xref">OpenID-Registration</a>]</span> または <span>[<a href="#RFC7592" class="cite xref">RFC7592</a>]</span> のいずれかを使用する OpenID Provider のコンテキストで使用される場合，クライアント登録またはクライアント管理のやり取りの一部として，以下のプロパティが利用できることが望ましい:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2"><code>digest_algorithm</code>: 選択されたダイジェストアルゴリズムを表す文字列値 (外部添付ファイル用) ．値は <a href="#opmetadata">OP metadata</a> で公表されているように，OP によってサポートされるダイジェスト アルゴリズムの 1 つでなければならない (SHALL)．このプロパティが設定されていない場合，デフォルトで <code>sha-256</code> が使用される．<a href="#section-6-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="opmetadata">
+<section id="section-7">
+      <h2 id="name-op-metadata">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-op-metadata" class="section-name selfRef">OP metadata</a>
+      </h2>
+<p id="section-7-1"><span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span> 実装で添付ファイルが使用されている場合， openid-configuration でサポートされている添付ファイルに関する機能を公表するには，OP メタデータの追加要素が必要である(<span>[<a href="#OpenID-Discovery" class="cite xref">OpenID-Discovery</a>]</span> 参照):<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2"><code>attachments_supported</code>: OP が添付ファイルをサポートする場合は必須 (REQUIRED)．OP でサポートされているすべての添付ファイルの種類を含む JSON 配列．可能な値は <code>external</code> と <code>embedded</code>． この配列が存在する場合，少なくとも 1 つのメンバーが必要である (SHALL)． 省略した場合，OP は添付ファイルをサポートしない．<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3"><code>digest_algorithms_supported</code>: OP が外部添付ファイルをサポートする場合は必須．外部添付ファイルのダイジェスト オブジェクト内で <code>alg</code> プロパティとして使用できる，サポートされているすべてのダイジェストアルゴリズムを含む JSON 配列．OP が外部添付ファイルをサポートする場合，少なくともアルゴリズム <code>sha-256</code> も OP によってサポートされなければならない (SHALL)．指定可能なダイジェスト/ハッシュ アルゴリズム名のリストは，IANA の <span>[<a href="#hash_name_registry" class="cite xref">hash_name_registry</a>]</span> (established by <span>[<a href="#RFC6920" class="cite xref">RFC6920</a>]</span>) で管理されている．<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">以下は "openid-configuration" の部分的な例である:<a href="#section-7-4" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-7-5">
+<pre>{
+...
+  "attachments_supported": [
+    "external",
+    "embedded"
+  ],
+    "digest_algorithms_supported": [
+    "sha-256"
+  ],
+...
+}
+</pre><a href="#section-7-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="examples">
+<section id="section-8">
+      <h2 id="name-examples">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
+      </h2>
+<p id="section-8-1">このセクションには，このドキュメントで説明されているエビデンスと添付ファイルの例を示す JSON スニペットが含まれる．<a href="#section-8-1" class="pilcrow">¶</a></p>
+<div id="example-requests">
+<section id="section-8.1">
+        <h3 id="name-example-requests">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-example-requests" class="section-name selfRef">Example requests</a>
+        </h3>
+<p id="section-8.1-1">このセクションでは，<code>verified_claims</code> のリクエストの例を示す．<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<div id="verification-of-claims-by-trust-framework-with-a-document-and-attachments">
+<section id="section-8.1.1">
+          <h4 id="name-verification-of-claims-by-t">
+<a href="#section-8.1.1" class="section-number selfRef">8.1.1. </a><a href="#name-verification-of-claims-by-t" class="section-name selfRef">Verification of claims by trust framework with a document and attachments</a>
+          </h4>
+<div class="lang-json sourcecode" id="section-8.1.1-1">
+<pre>{
+  "userinfo": {
+    "verified_claims": {
+      "verification": {
+        "trust_framework": {
+          "value": "de_aml"
+        },
+        "evidence": [
+          {
+            "type": {
+              "value": "document"
+            },
+            "method": {
+              "value": "pipp"
+            },
+            "document_details": {
+              "type": {
+                "values": [
+                  "idcard",
+                  "passport"
+                ]
+              }
+            },
+            "attachments": null
+          }
+        ]
+      },
+      "claims": {
+        "given_name": null,
+        "family_name": null,
+        "birthdate": null
+      }
+    }
+  }
+}
+</pre><a href="#section-8.1.1-1" class="pilcrow">¶</a>
+</div>
+<div id="attachments-1">
+<section id="section-8.1.1.1">
+            <h5 id="name-attachments-2">
+<a href="#section-8.1.1.1" class="section-number selfRef">8.1.1.1. </a><a href="#name-attachments-2" class="section-name selfRef">Attachments</a>
+            </h5>
+<p id="section-8.1.1.1-1">RP は，Verified Claims とともに添付ファイルの受信を明示的にリクエストできる:<a href="#section-8.1.1.1-1" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-8.1.1.1-2">
+<pre>{
+  "userinfo": {
+    "verified_claims": {
+      "verification": {
+        "trust_framework": null,
+        "attachments": null
+      },
+      "claims": {
+        "given_name": null,
+        "family_name": null,
+        "birthdate": null
+      }
+    }
+  }
+}
+</pre><a href="#section-8.1.1.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-8.1.1.1-3">他の Claims と同様に，添付ファイルの Claim もリクエスト内で <code>essential</code> としてマークすることができる．<a href="#section-8.1.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="example-responses">
+<section id="section-8.2">
+        <h3 id="name-example-responses">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-example-responses" class="section-name selfRef">Example responses</a>
+        </h3>
+<p id="section-8.2-1">このセクションでは，<code>verified_claims</code> を含むレスポンスの例を示す．<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">Note: Embedded attachments の例は切り捨てられた値を含む.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<div id="document-with-external-attachments">
+<section id="section-8.2.1">
+          <h4 id="name-document-with-external-atta">
+<a href="#section-8.2.1" class="section-number selfRef">8.2.1. </a><a href="#name-document-with-external-atta" class="section-name selfRef">Document with external attachments</a>
+          </h4>
+<div class="breakable lang-json sourcecode" id="section-8.2.1-1">
+<pre>{
+  "verified_claims": {
+    "verification": {
+      "trust_framework": "de_aml",
+      "time": "2012-04-23T18:25Z",
+      "verification_process": "f24c6f-6d3f-4ec5-973e-b0d8506f3bc7",
+      "evidence": [
+        {
+          "type": "document",
+          "method": "pipp",
+          "time": "2012-04-22T11:30Z",
+          "document_details": {
+            "type": "idcard",
+            "issuer": {
+              "name": "Stadt Augsburg",
+              "country": "DE"
+            },
+            "document_number": "53554554",
+            "date_of_issuance": "2010-03-23",
+            "date_of_expiry": "2020-03-22"
+          },
+          "attachments": [
+            {
+              "desc": "Front of id document",
+              "digest" : {
+                "alg": "sha-256",
+                "value": "n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg="
+              },
+              "url": "https://example.com/attachments/pGL9yz4hZQ"
+            },
+            {
+              "desc": "Back of id document",
+              "digest" : {
+                "alg": "sha-256",
+                "value": "/WGgOvT3fYcPwh4F5+gGeAlcktgIz7O1wnnuBMdKyhM="
+              },
+              "url": "https://example.com/attachments/4Ag8IpOf95"
+            }
+          ]
+        }
+      ]
+    },
+    "claims": {
+      "given_name": "Max",
+      "family_name": "Meier",
+      "birthdate": "1956-01-28",
+      "place_of_birth": {
+        "country": "DE",
+        "locality": "Musterstadt"
+      },
+      "nationalities": [
+        "DE"
+      ],
+      "address": {
+        "locality": "Maxstadt",
+        "postal_code": "12344",
+        "country": "DE",
+        "street_address": "An der Weide 22"
+      }
+    }
+  }
+}
+</pre><a href="#section-8.2.1-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="utility-statement-with-attachments">
+<section id="section-8.2.2">
+          <h4 id="name-utility-statement-with-atta">
+<a href="#section-8.2.2" class="section-number selfRef">8.2.2. </a><a href="#name-utility-statement-with-atta" class="section-name selfRef">Utility statement with attachments</a>
+          </h4>
+<div class="breakable lang-json sourcecode" id="section-8.2.2-1">
+<pre>{
+  "verified_claims": {
+    "verification": {
+      "trust_framework": "de_aml",
+      "time": "2012-04-23T18:25Z",
+      "verification_process": "513645-e44b-4951-942c-7091cf7d891d",
+      "evidence": [
+        {
+          "type": "document",
+          "check_details": [
+            {
+              "check_method": "vpip"
+            }
+          ],
+          "time": "2021-04-09T14:12Z",
+          "document_details": {
+            "type": "utility_statement",
+            "date_of_issuance": "2013-01-31",
+            "issuer": {
+                "name": "Stadtwerke Musterstadt",
+                "country": "DE",
+                "region": "Niedersachsen",
+                "street_address": "Energiestrasse 33"
+            }
+          },
+          "attachments": [
+            {
+              "desc": "scan of bill",
+              "content_type": "application/pdf",
+              "content": "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAADSFsjdkhjwhAABJRU5ErkJggg=="
+            }
+          ]
+        }
+      ]
+    },
+    "claims": {
+      "given_name": "Max",
+      "family_name": "Meier",
+      "birthdate": "1956-01-28",
+      "place_of_birth": {
+        "country": "DE",
+        "locality": "Musterstadt"
+      },
+      "nationalities": [
+        "DE"
+      ],
+      "address": {
+        "locality": "Maxstadt",
+        "postal_code": "12344",
+        "country": "DE",
+        "street_address": "An der Weide 22"
+      }
+    }
+  }
+}
+</pre><a href="#section-8.2.2-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="vouch-with-embedded-attachments">
+<section id="section-8.2.3">
+          <h4 id="name-vouch-with-embedded-attachm">
+<a href="#section-8.2.3" class="section-number selfRef">8.2.3. </a><a href="#name-vouch-with-embedded-attachm" class="section-name selfRef">Vouch with embedded attachments</a>
+          </h4>
+<div class="breakable lang-json sourcecode" id="section-8.2.3-1">
+<pre>{
+  "verified_claims": {
+    "verification": {
+      "trust_framework": "uk_diatf",
+      "assurance_level": "high",
+      "assurance_process": {
+          "policy": "gpg45",
+          "procedure": "h1b"
+      },
+      "time": "2020-09-23T14:12Z",
+      "verification_process": "99476DA2-ACDC-5N13-10WC-26B415B52",
+      "evidence": [
+        {
+          "type": "vouch",
+          "check_details": [
+            {
+              "check_method": "vpip"
+            },
+            {
+              "check_method": "pvr"
+            }
+          ],
+          "time": "2020-02-23T07:52Z",
+          "attestation": {
+            "type": "written_attestation",
+            "reference_number": "6485-1619-3976-6671",
+            "date_of_issuance": "2020-02-13",
+            "voucher": {
+                "given_name": "Peter",
+                "family_name": "Crowe",
+                "occupation": "Executive Principal",
+                "organization": "Kristin School"
+            }
+          },
+          "attachments": [
+            {
+              "desc": "scan of vouch",
+              "content_type": "application/pdf",
+              "content": "d16d2552e35582810e5a40e523716504525b6016ae96844ddc533163059b3067=="
+            }
+          ]
+        }
+      ]
+    },
+    "claims": {
+      "given_name": "Megan",
+      "family_name": "Howard",
+      "birthdate": "2000-01-31",
+      "place_of_birth": {
+        "country": "NZL"
+      },
+      "address": {
+        "locality": "Croydon",
+        "country": "UK",
+        "street_address": "69 Kidderminster Road"
+      }
+    }
+  }
+}
+</pre><a href="#section-8.2.3-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<section id="section-9">
+      <h2 id="name-normative-references-2">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references-2" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="ISODIR2">[ISODIR2]</dt>
+      <dd>
+<span class="refAuthor">ISO/IEC</span>, <span class="refTitle">"ISO/IEC Directives, Part 2 - Principles and rules for the structure and drafting of ISO and IEC documents"</span>, <span>&lt;<a href="https://www.iso.org/sites/directives/current/part2/index.xhtml">https://www.iso.org/sites/directives/current/part2/index.xhtml</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenID-Discovery">[OpenID-Discovery]</dt>
+      <dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, and <span class="refAuthor">E. Jay</span>, <span class="refTitle">"OpenID Connect Discovery 1.0 incorporating errata set 1"</span>, <time datetime="2014-11-08" class="refDate">8 November 2014</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-discovery-1_0.html">https://openid.net/specs/openid-connect-discovery-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenID-Registration">[OpenID-Registration]</dt>
+      <dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">M. Jones</span>, <span class="refTitle">"OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1"</span>, <time datetime="2014-11-08" class="refDate">8 November 2014</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-registration-1_0.html">https://openid.net/specs/openid-connect-registration-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6750">[RFC6750]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span> and <span class="refAuthor">D. Hardt</span>, <span class="refTitle">"The OAuth 2.0 Authorization Framework: Bearer Token Usage"</span>, <span class="seriesInfo">RFC 6750</span>, <span class="seriesInfo">DOI 10.17487/RFC6750</span>, <time datetime="2012-10" class="refDate">October 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6750">https://www.rfc-editor.org/info/rfc6750</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6838">[RFC6838]</dt>
+      <dd>
+<span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7519">[RFC7519]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7519">https://www.rfc-editor.org/info/rfc7519</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="hash_name_registry">[hash_name_registry]</dt>
+    <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Named Information Hash Algorithm Registry"</span>, <time datetime="2016-09" class="refDate">September 2016</time>, <span>&lt;<a href="https://www.iana.org/assignments/named-information/">https://www.iana.org/assignments/named-information/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-10">
+      <h2 id="name-informative-references">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+      </h2>
+<dl class="references">
+<dt id="OpenID">[OpenID]</dt>
+      <dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">de Medeiros, B.</span>, and <span class="refAuthor">C. Mortimore</span>, <span class="refTitle">"OpenID Connect Core 1.0 incorporating errata set 1"</span>, <time datetime="2014-11-08" class="refDate">8 November 2014</time>, <span>&lt;<a href="http://openid.net/specs/openid-connect-core-1_0.html">http://openid.net/specs/openid-connect-core-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenID4IDA">[OpenID4IDA]</dt>
+      <dd>
+<span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Fett, D.</span>, <span class="refAuthor">Haine, M.</span>, <span class="refAuthor">Pulido, A.</span>, <span class="refAuthor">Lehmann, K.</span>, and <span class="refAuthor">K. Koiwai</span>, <span class="refTitle">"OpenID Connect for Identity Assurance 1.0"</span>, <time datetime="2023-06-16" class="refDate">16 June 2023</time>, <span>&lt;<a href="http://openid.net/specs/openid-connect-4-identity-assurance-1_0.html">http://openid.net/specs/openid-connect-4-identity-assurance-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2046">[RFC2046]</dt>
+      <dd>
+<span class="refAuthor">Freed, N.</span> and <span class="refAuthor">N. Borenstein</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types"</span>, <span class="seriesInfo">RFC 2046</span>, <span class="seriesInfo">DOI 10.17487/RFC2046</span>, <time datetime="1996-11" class="refDate">November 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2046">https://www.rfc-editor.org/info/rfc2046</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4648">[RFC4648]</dt>
+      <dd>
+<span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc4648">https://datatracker.ietf.org/doc/html/rfc4648</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5322">[RFC5322]</dt>
+      <dd>
+<span class="refAuthor">Resnick, P., Ed.</span>, <span class="refTitle">"Internet Message Format"</span>, <span class="seriesInfo">RFC 5322</span>, <span class="seriesInfo">DOI 10.17487/RFC5322</span>, <time datetime="2008-10" class="refDate">October 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5322">https://www.rfc-editor.org/info/rfc5322</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6920">[RFC6920]</dt>
+      <dd>
+<span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Kutscher, D.</span>, <span class="refAuthor">Dannewitz, C.</span>, <span class="refAuthor">Ohlman, B.</span>, <span class="refAuthor">Keranen, A.</span>, and <span class="refAuthor">P. Hallam-Baker</span>, <span class="refTitle">"Naming Things with Hashes"</span>, <span class="seriesInfo">RFC 6920</span>, <span class="seriesInfo">DOI 10.17487/RFC6920</span>, <time datetime="2013-04" class="refDate">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6920">https://www.rfc-editor.org/info/rfc6920</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7592">[RFC7592]</dt>
+      <dd>
+<span class="refAuthor">Richer, J., Ed.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">M. Machulak</span>, <span class="refTitle">"OAuth 2.0 Dynamic Client Registration Management Protocol"</span>, <span class="seriesInfo">RFC 7592</span>, <span class="seriesInfo">DOI 10.17487/RFC7592</span>, <time datetime="2015-07" class="refDate">July 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7592">https://www.rfc-editor.org/info/rfc7592</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8707">[RFC8707]</dt>
+    <dd>
+<span class="refAuthor">Campbell, B.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Resource Indicators for OAuth 2.0"</span>, <span class="seriesInfo">RFC 8707</span>, <span class="seriesInfo">DOI 10.17487/RFC8707</span>, <time datetime="2020-02" class="refDate">February 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8707">https://www.rfc-editor.org/info/rfc8707</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-11">
+      <h2 id="name-translation-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-translation-references" class="section-name selfRef">Translation References</a>
+      </h2>
+<dl class="references">
+<dt id="oidfj">[oidfj]</dt>
+      <dd>
+<span class="refAuthor">OpenID ファウンデーションジャパン</span>, <span class="refTitle">"OpenID ファウンデーションジャパン"</span>, <span>&lt;<a href="https://www.openid.or.jp">https://www.openid.or.jp</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="oidfj-trans">[oidfj-trans]</dt>
+      <dd>
+<span class="refAuthor">OpenID ファウンデーションジャパン</span>, <span class="refTitle">"翻訳・教育ワーキンググループ"</span>, <span>&lt;<a href="http://openid-foundation-japan.github.com/">http://openid-foundation-japan.github.com/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="oidfj-kycwg">[oidfj-kycwg]</dt>
+      <dd>
+<span class="refAuthor">OpenID ファウンデーションジャパン</span>, <span class="refTitle">"KYC ワーキンググループ"</span>, <span>&lt;<a href="https://www.openid.or.jp">https://www.openid.or.jp</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="oidfj-github">[oidfj-github]</dt>
+    <dd>
+<span class="refAuthor">OpenID ファウンデーションジャパン</span>, <span class="refTitle">"Github レポジトリー"</span>, <span>&lt;<a href="https://github.com/openid-foundation-japan">https://github.com/openid-foundation-japan</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="Acknowledgements">
+<section id="appendix-A">
+      <h2 id="name-acknowledgements">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="appendix-A-1">The following people at yes.com and partner companies contributed to the concept described in the initial contribution to this document: Karsten Buch, Lukas Stiebig, Sven Manz, Waldemar Zimpfer, Willi Wiedergold, Fabian Hoffmann, Daniel Keijsers, Ralf Wagner, Sebastian Ebling, Peter Eisenhofer.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">We would like to thank Julian White, Bjorn Hjelm, Stephane Mouy, Alberto Pulido, Joseph Heenan, Vladimir Dzhuvinov, Azusa Kikuchi, Naohiro Fujie, Takahiko Kawasaki, Sebastian Ebling, Marcos Sanz, Tom Jones, Mike Pegman, Michael B. Jones, Jeff Lombardo, Taylor Ongaro, Peter Bainbridge-Clayton, Adrian Field, George Fletcher, Tim Cappalli, Michael Palage, Sascha Preibisch, Giuseppe De Marco, Nick Mothershaw, Hodari McClain, Nat Sakimura and Dima Postnikov for their valuable feedback and contributions that helped to evolve this document.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="notices">
+<section id="appendix-B">
+      <h2 id="name-notices">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-notices" class="section-name selfRef">Notices</a>
+      </h2>
+<p id="appendix-B-1">Copyright (c) 2024 The OpenID Foundation.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">The OpenID Foundation (OIDF) grants to any Contributor, developer, implementer, or other interested party a non-exclusive, royalty free, worldwide copyright license to reproduce, prepare derivative works from, distribute, perform and display, this Implementers Draft or Final Specification solely for the purposes of (i) developing specifications, and (ii) implementing Implementers Drafts and Final Specifications based on such documents, provided that attribution be made to the OIDF as the source of the material, but that such attribution does not indicate an endorsement by the OIDF.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">The technology described in this document was made available from contributions from various sources, including members of the OpenID Foundation and others. Although the OpenID Foundation has taken steps to help ensure that the technology is available for distribution, it takes no position regarding the validity or scope of any intellectual property or other rights that might be claimed to pertain to the implementation or use of the technology described in this document or the extent to which any license under such rights might or might not be available; neither does it represent that it has made any independent effort to identify any such rights. The OpenID Foundation and the contributors to this document make no (and hereby expressly disclaim any) warranties (express, implied, or otherwise), including implied warranties of merchantability, non-infringement, fitness for a particular purpose, or title, related to this document, and the entire risk as to implementing this document is assumed by the implementer. The OpenID Intellectual Property Rights policy requires contributors to offer a patent promise not to assert certain patent claims against other contributors and against implementers. The OpenID Foundation invites any interested party to bring to its attention any copyrights, patents, patent applications, or other proprietary rights that may cover technology that may be required to practice this document.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="document-history">
+<section id="appendix-C">
+      <h2 id="name-document-history">
+<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-document-history" class="section-name selfRef">Document History</a>
+      </h2>
+<p id="appendix-C-1">[[ To be removed from the final specification ]]<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<p id="appendix-C-2">-00 (WG document)<a href="#appendix-C-2" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="appendix-C-3.1">Split this content from openid-connect-4-identity-assurance-1_0-13 WG document<a href="#appendix-C-3.1" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="appendix-C-3.2">Add RFC4648 as normative reference<a href="#appendix-C-3.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="translator">
+<section id="appendix-D">
+      <h2 id="name-translator">
+<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-translator" class="section-name selfRef">Translator</a>
+      </h2>
+<p id="appendix-D-1">本仕様の翻訳は, OpenID ファウンデーションジャパン <span>[<a href="#oidfj" class="cite xref">oidfj</a>]</span> KYC ワーキンググループ <span>[<a href="#oidfj-kycwg" class="cite xref">oidfj-kycwg</a>]</span>, 翻訳・教育ワーキンググループ <span>[<a href="#oidfj-trans" class="cite xref">oidfj-trans</a>]</span> を主体として, 有志のメンバーによって行われました.
+質問や修正依頼などについては, Github レポジトリー <span>[<a href="#oidfj-github" class="cite xref">oidfj-github</a>]</span> にご連絡ください.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="appendix-D-2.1">Muneomi Sakuta (SoftBank Corp.)<a href="#appendix-D-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="appendix-D-2.2">Yuu Kikuchi (OPTiM Corp.)<a href="#appendix-D-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="appendix-D-2.3">Nov Matake (YAuth.jp)<a href="#appendix-D-2.3" class="pilcrow">¶</a>
+</li>
+        <li class="compact" id="appendix-D-2.4">Kiyoshi Okuda (Fujitsu Ltd.)<a href="#appendix-D-2.4" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-E">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Torsten Lodderstedt</span></div>
+<div dir="auto" class="left"><span class="org">sprind.org</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:torsten@lodderstedt.net" class="email">torsten@lodderstedt.net</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Daniel Fett</span></div>
+<div dir="auto" class="left"><span class="org">Authlete</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mail@danielfett.de" class="email">mail@danielfett.de</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mark Haine</span></div>
+<div dir="auto" class="left"><span class="org">Considrd.Consulting Ltd</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mark@considrd.consulting" class="email">mark@considrd.consulting</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Alberto Pulido</span></div>
+<div dir="auto" class="left"><span class="org">Santander</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:alberto.pulido@santander.co.uk" class="email">alberto.pulido@santander.co.uk</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Kai Lehmann</span></div>
+<div dir="auto" class="left"><span class="org">1&amp;1 Mail &amp; Media Development &amp; Technology GmbH</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:kai.lehmann@1und1.de" class="email">kai.lehmann@1und1.de</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Kosuke Koiwai</span></div>
+<div dir="auto" class="left"><span class="org">KDDI Corporation</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ko-koiwai@kddi.com" class="email">ko-koiwai@kddi.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

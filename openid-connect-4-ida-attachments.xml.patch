@@ -1,0 +1,39 @@
+633a634,671
+> </references>
+> <references title="Translation References">
+> <reference anchor="oidfj" target="https://www.openid.or.jp">
+>   <front>
+>     <title>OpenID ファウンデーションジャパン</title>
+>     <author fullname="OpenID ファウンデーションジャパン">
+>       <organization>OpenID ファウンデーションジャパン</organization>
+>     </author>
+>     <date year=""></date>
+>   </front>
+> </reference>
+> <reference anchor="oidfj-trans" target='http://openid-foundation-japan.github.com/'>
+>   <front>
+>     <title>翻訳・教育ワーキンググループ</title>
+>     <author fullname="OpenID ファウンデーションジャパン">
+>       <organization>OpenID ファウンデーションジャパン</organization>
+>     </author>
+>     <date year=""></date>
+>   </front>
+> </reference>
+> <reference anchor="oidfj-kycwg" target='https://www.openid.or.jp'>
+>   <front>
+>     <title>KYC ワーキンググループ</title>
+>     <author fullname="OpenID ファウンデーションジャパン">
+>       <organization>OpenID ファウンデーションジャパン</organization>
+>     </author>
+>     <date year=""></date>
+>   </front>
+> </reference>
+> <reference anchor="oidfj-github" target='https://github.com/openid-foundation-japan'>
+>   <front>
+>     <title>Github レポジトリー</title>
+>     <author>
+>       <organization>OpenID ファウンデーションジャパン</organization>
+>     </author>
+>     <date year=""></date>
+>   </front>
+> </reference>

@@ -1,0 +1,73 @@
+{
+  "verified_claims": {
+    "verification": {
+      "trust_framework": "it_spid",
+      "assurance_process": {
+        "assurance_details": [
+          {
+            "assurance_type": "evidence_validation",
+            "evidence_ref": [
+              {
+                "check_id": "LD-95912059850982"
+              }
+            ]
+          },
+          {
+            "assurance_type": "verification",
+            "evidence_ref": [
+              {
+                "check_id": "V-ng034hng2945nqw"
+              }
+            ]
+          }
+        ]
+      },
+      "time": "2019-04-20T20:16Z",
+      "verification_process": "b54c6f-6d3f-4ec5-973e-b0d8506f3bc7",
+      "evidence": [
+        {
+          "type": "document",
+          "check_details": [
+            {
+              "check_method": "vcrypt",
+              "check_id": "LD-95912059850982"
+            },
+            {
+              "check_method": "bvr",
+              "check_id": "V-ng034hng2945nqw"
+            }
+          ],
+          "time": "2019-04-20T20:11Z",
+          "document_details": {
+            "type": "passport",
+            "issuer": {
+              "name": "Ministro Affari Esteri",
+              "country": "ITA"
+            },
+            "document_number": "83774554",
+            "date_of_issuance": "2011-04-20",
+            "date_of_expiry": "2021-04-19"
+          }
+        }
+      ]
+    },
+    "claims": {
+      "given_name": "Maria",
+      "family_name": "Rossi",
+      "birthdate": "1980-01-11",
+      "place_of_birth": {
+        "country": "ITA",
+        "locality": "Roma"
+      },
+      "nationalities": [
+        "IT"
+      ],
+      "address": {
+        "locality": "Imola BO",
+        "postal_code": "40026",
+        "country": "ITA",
+        "street_address": "Viale Dante Alighieri, 26"
+      }
+    }
+  }
+}
