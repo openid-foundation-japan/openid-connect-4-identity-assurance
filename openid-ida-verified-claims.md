@@ -1,5 +1,5 @@
 %%%
-title = "OpenID Identity Assurance schema definition 1.0 draft"
+title = "OpenID Identity Assurance Schema Definition 1.0"
 abbrev = "openid-ida-verified-claims-1_0"
 ipr = "none"
 workgroup = "eKYC-IDA"
@@ -8,7 +8,7 @@ keyword = ["security", "openid", "identity assurance", "ekyc", "claims"]
 [seriesInfo]
 name = "Internet-Draft"
 
-value = "openid-ida-verified-claims-1_0-00"
+value = "openid-ida-verified-claims-1_0-02"
 
 status = "standard"
 
@@ -107,7 +107,6 @@ interpreted with their natural language meanings.
 # Scope
 
 <!-- This specification defines the schema of JSON objects used to describe identity assurance relating to a natural person.  It consists of the definition of a new claim called `verified_claims` that will be registered with the IANA "JSON Web Token Claims Registry" established by [@!RFC7519].  As part of the definition of the `verified_claims` claim there is also be an element defined called `verification` that provides a flexible container for identity assurance metadata. It is anticipated that the `verification` element may be used by other spec authors and implementers where the verification metadata is needed independently of the end-user verified claims. -->
-
 本仕様では, 自然人に関連するidentity assurance を記述するために使用されるJSON オブジェクトのスキーマを定義している. これは [@!RFC7519] で確立されたIANA の "JSON Web Token Claims Registry" に登録される予定である, `verified_claims` と呼ばれる新しいクレームの定義を構成している. `verified_claims` クレームの定義の一部として, identity assurance メタデータのための柔軟なコンテナを提供する, `verification` と呼ばれる要素も定義されている. `verification` 要素は End-User が検証した Claim に依存しない verification メタデータが必要とされる場合に, 他の仕様の著者や実装者によって使用されるかもしれないことが予期される.
 
 # Normative references
@@ -198,7 +197,7 @@ Note 1 to entry: 法的要件に応じて,プロバイダーは identity verific
 <!-- Extensions of this specification, including trust framework definitions, can define further constraints on the data structure. -->
 トラストフレームワークの定義を含む本仕様の拡張は，データ構造に対するさらなる制約を定義できる．
 
-## claims element {#claimselement}
+## Claims element {#claimselement}
 
 <!-- The `claims` element contains the claims about the end-user which were verified by the process and according to the policies determined by the corresponding `verification` element described in the next section. -->
 `claims` 要素にはプロセスによって検証され, 次のセクションで説明する，対応した `verification` 要素によって決定されたポリシーに従って検証された End-User についての Claim が含まれる.
@@ -225,7 +224,7 @@ Claim 名は, OpenID Connect 仕様 [@!OpenID] の Section 5.2 で指定され�
 <!-- The `claims` element may be empty, to support use cases where verification is required but no claims data needs to be shared. -->
 `claims` 要素は, 検証は要求されるが共有するClaimを必要としないユースケースをサポートするために, 空になるかもしれない (MAY).
 
-## verification element {#verification}
+## Verification element {#verification}
 
 ### General
 
@@ -276,7 +275,7 @@ Claim Recipients は理解できないトラストフレームワーク識別子
   * `procedure`: Optional. 準拠した `policy` からの特定の手順を表す文字列．
   * `assurance_details`: Optional. エビデンスが `policy` にどのように準拠しているかに関する詳細を示す JSON 配列. この配列が存在する場合, 少なくとも一つの要素を持たなければならない (SHALL). 各要素は以下のサブ要素を持つ可能性がある:
      * `assurance_type`: Optional. エビデンスが `assurance_process` のどの部分を満たしているのかを示す文字列.
-    * `assurance_classification`: Optional. `trust_framework`　の要求に応じて `evidence` がどのように分類又は評価されたのか反映する文字列.
+    * `assurance_classification`: Optional. `trust_framework` の要求に応じて `evidence` がどのように分類又は評価されたのか反映する文字列.
     * `evidence_ref`: Optional. 参照されているエビデンスの JSON 配列. この配列が存在する場合, 少なくとも一つの要素が存在しなければならない (SHALL).
       * `check_id`: Required. `evidence` 配列の要素である `check_details` で用いられる `check_id` キーを参照する識別子. claim provider は, `evidence_ref` が用いられる場合, `check_id` が `check_details` に存在することを確認しなければならない (SHALL).
       * `evidence_metadata`: Optional. `trust_framework` への準拠を示すために, `assurance_process` が必要とする `evidence` についてのメタデータを指すオブジェクト. 次のサブ要素を持つ:
@@ -307,7 +306,9 @@ Claim Recipients は理解できないトラストフレームワーク識別子
 
 <{{examples/response/ida_minimum.json}}
 
-### evidence element {#evidence_element}
+### Evidence element {#evidence_element}
+
+#### Evidence element structure
 
 <!-- Members of the `evidence` array are structured with the following elements: -->
 `evidence` 配列の要素は, 次の要素で構成されている:
@@ -563,7 +564,7 @@ identity verification プロセス中に，特定のドキュメントアーテ�
 Claim Provider によってサポートされ，Claim Recipient から要求された場合，Claim Recipient が検証済み Claim 情報とともにこれらのアーティファクトを保存できるように，これらの要素を検証済み Claim のレスポンスに含めることができる．
 
 <!-- An attachment is represented by a JSON element. The definition of attachments and the schema representing them are described in [@Attachments]. -->
-添付ファイルは JSON オブジェクト形式で表現される．The definition of attachments and the schema representing them are described in [@Attachments].
+添付ファイルは JSON オブジェクト形式で表現される．添付ファイルの定義とそれを表すスキーマは [@Attachments] で説明されている．
 
 ## Examples
 
@@ -582,6 +583,14 @@ Claim Provider によってサポートされ，Claim Recipient から要求さ�
 ### Derived claims
 
 <{{examples/response/derived_claims_1.json}}
+
+# Security considerations {#Security}
+
+<!-- The working group has identified no security considerations that pertain directly to this specification. -->
+ワーキンググループはこの仕様に直接関係する security considerations を特定していない．
+
+<!-- The data structures described in this specification will contain personal information. Standards referencing this specification and implementers using this specification should consider the secure transport of these structures and security and privacy implications that may arise from their use. -->
+本仕様で説明されるデータ構造には個人情報が含まれる．本仕様を参照する標準と本仕様を使用する実装者は，これらの構造の安全な伝送と，その使用から生じうるセキュリティとプライバシーの影響を考慮すべきである．
 
 {backmatter}
 
@@ -823,8 +832,8 @@ Change Controller:
 : eKYC and Identity Assurance Working Group - openid-specs-ekyc-ida@lists.openid.net
 
 Specification Document(s):
-<!-- : Section [Claims](#claims) of this document -->
-: 本ドキュメントの [Claims](#claims) セクション
+<!-- : Section [verified claims](#verified_claims) of this document -->
+: 本ドキュメントの [verified claims](#verified_claims) セクション
 
 
 # Acknowledgements {#Acknowledgements}
@@ -847,15 +856,6 @@ Copyright (c) 2024 The OpenID Foundation.
 The OpenID Foundation (OIDF) grants to any Contributor, developer, implementer, or other interested party a non-exclusive, royalty free, worldwide copyright license to reproduce, prepare derivative works from, distribute, perform and display, this Implementers Draft or Final Specification solely for the purposes of (i) developing specifications, and (ii) implementing Implementers Drafts and Final Specifications based on such documents, provided that attribution be made to the OIDF as the source of the material, but that such attribution does not indicate an endorsement by the OIDF.
 
 The technology described in this specification was made available from contributions from various sources, including members of the OpenID Foundation and others. Although the OpenID Foundation has taken steps to help ensure that the technology is available for distribution, it takes no position regarding the validity or scope of any intellectual property or other rights that might be claimed to pertain to the implementation or use of the technology described in this specification or the extent to which any license under such rights might or might not be available; neither does it represent that it has made any independent effort to identify any such rights. The OpenID Foundation and the contributors to this specification make no (and hereby expressly disclaim any) warranties (express, implied, or otherwise), including implied warranties of merchantability, non-infringement, fitness for a particular purpose, or title, related to this specification, and the entire risk as to implementing this specification is assumed by the implementer. The OpenID Intellectual Property Rights policy requires contributors to offer a patent promise not to assert certain patent claims against other contributors and against implementers. The OpenID Foundation invites any interested party to bring to its attention any copyrights, patents, patent applications, or other proprietary rights that may cover technology that may be required to practice this specification.
-
-# Document history
-
-   [[ To be removed from the final specification ]]
-
-
-   -00 (WG document)
-
-   *  Split this content from openid-connect-4-identity-assurance-1_0-13 WG document
 
 # Translator {#translator}
 

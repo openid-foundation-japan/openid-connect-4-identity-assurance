@@ -1,4 +1,7 @@
-1024a1025,1063
+1023a1024,1061
+>   </front>
+> </reference>
+> </references>
 > <references title="Translation References">
 > <reference anchor="oidfj" target="https://www.openid.or.jp">
 >   <front>
@@ -34,7 +37,3 @@
 >       <organization>OpenID ファウンデーションジャパン</organization>
 >     </author>
 >     <date year=""></date>
->   </front>
-> </reference>
-> </references>
-> 

@@ -1,5 +1,6 @@
-349a350,387
-> </references>
+356c356,393
+< 
+---
 > <references title="Translation References">
 > <reference anchor="oidfj" target="https://www.openid.or.jp">
 >   <front>
@@ -37,3 +38,4 @@
 >     <date year=""></date>
 >   </front>
 > </reference>
+> </references>

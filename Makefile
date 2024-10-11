@@ -15,4 +15,4 @@ xml2rfc: $(patsubst %.md, %.html, $(SPEC_FILES))
 	patch -p0 $@ < $@.patch
 
 %.html: %.xml
-	docker run --rm -v $$(pwd):/opt $(IMAGE_NAME) xml2rfc -p . --html $<
+	docker run --rm -v $$(pwd):/opt -e FAKETIME="2024-10-01 00:00:00" $(IMAGE_NAME) xml2rfc -p . --html $<
